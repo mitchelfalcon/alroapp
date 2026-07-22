@@ -1,89 +1,153 @@
-import React from "react";
-import { motion } from "motion/react";
-import { MoreHorizontal } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { MoreVertical, BarChart2, TrendingUp, X, Activity } from "lucide-react";
 
 export function VoiceMetricsCard() {
-  // Height values matching the photo
-  const metrics = [
-    { day: "Wed", value: 85, height: "76%" },
-    { day: "Thu", value: 45, height: "42%" },
-    { day: "Fri", value: 72, height: "68%" },
-    { day: "Sat", value: 15, height: "15%" },
-    { day: "Sun", value: 10, height: "10%" },
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
+
+  const daysData = [
+    { day: "Mon", heightPercent: 70, count: 142, growth: "+12%" },
+    { day: "Tue", heightPercent: 45, count: 98, growth: "-4%" },
+    { day: "Wed", heightPercent: 85, count: 184, growth: "+28%" },
+    { day: "Thu", heightPercent: 60, count: 120, growth: "+8%" },
+    { day: "Fri", heightPercent: 75, count: 165, growth: "+18%" },
   ];
 
   return (
-    <div
-      className="p-5 rounded-3xl glass-neo-card"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#1e3a8a] font-display">
-          Voice Interaction Metrics
-        </h3>
-        <button className="p-1.5 rounded-full hover:bg-white/40 transition-colors text-slate-400 hover:text-slate-600">
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* 5 Glassy 3D Cylinders */}
-      <div className="flex justify-between items-end h-40 px-2 relative mb-2">
-        {/* Background Grid Lines for Glass feel */}
-        <div className="absolute inset-x-0 bottom-0 top-2 flex flex-col justify-between pointer-events-none opacity-[0.06]">
-          <div className="border-b border-[#1e3a8a] w-full" />
-          <div className="border-b border-[#1e3a8a] w-full" />
-          <div className="border-b border-[#1e3a8a] w-full" />
-          <div className="border-b border-[#1e3a8a] w-full" />
+    <>
+      <motion.div
+        className="p-5 rounded-3xl glass-neo-card relative overflow-hidden h-full flex flex-col justify-between group border border-white/90 hover:border-blue-400/80 transition-all duration-300 hover:shadow-[0_10px_30px_rgba(37,99,235,0.18),12px_12px_28px_rgba(165,185,210,0.35),-12px_-12px_28px_rgba(255,255,255,0.98)] cursor-pointer"
+        whileHover={{ y: -2 }}
+        onClick={() => setIsAnalyticsOpen(true)}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-[11px] font-extrabold uppercase tracking-wider text-slate-700 font-sans flex items-center gap-1.5">
+            Voice Interaction Metrics
+          </h3>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsAnalyticsOpen(true);
+            }}
+            className="p-1 rounded-full hover:bg-slate-200/50 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+          >
+            <MoreVertical className="w-3.5 h-3.5" />
+          </button>
         </div>
 
-        {metrics.map((m, idx) => (
-          <div key={idx} className="flex flex-col items-center flex-1 h-full group">
-            <div className="relative w-7 h-full flex items-end justify-center">
-              {/* The 3D Glass Cylinder Tube */}
-              <div className="absolute inset-x-0 bottom-0 top-0 rounded-full bg-slate-950/[0.03] border border-white/40" />
+        {/* 5 Glass 3D Bar Charts */}
+        <div className="flex items-end justify-between gap-2 h-36 px-2 my-2 relative">
+          {daysData.map((d, i) => (
+            <div
+              key={d.day}
+              className="flex-1 flex flex-col items-center h-full justify-end relative group/bar cursor-pointer"
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {/* Tooltip */}
+              <AnimatePresence>
+                {hoveredIndex === i && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 5, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="absolute -top-10 z-20 px-2.5 py-1 rounded-xl bg-slate-900 text-white text-[9px] font-black font-sans shadow-lg whitespace-nowrap pointer-events-none"
+                  >
+                    {d.day}: {d.count} req ({d.growth})
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-              {/* Active filled cylinder */}
-              <motion.div
-                className="absolute inset-x-0 bottom-0 rounded-full cursor-pointer overflow-hidden origin-bottom"
-                initial={{ scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                transition={{ duration: 1.2, delay: idx * 0.1, ease: [0.34, 1.56, 0.64, 1] }}
-                style={{
-                  height: m.height,
-                  background: "linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%)",
-                  boxShadow: "inset -2px 0 6px rgba(0,0,0,0.2), inset 2px 0 6px rgba(255,255,255,0.4), 0 4px 12px rgba(37,99,235,0.2)",
-                }}
-              >
-                {/* 3D Cylinder gloss highlight layer */}
-                <div className="absolute inset-y-0 left-[2px] w-[3px] bg-white/40 rounded-full blur-[0.5px]" />
-                <div className="absolute inset-y-0 right-[2px] w-[2px] bg-black/10 rounded-full" />
-
-                {/* Shimmer light effect running up */}
+              {/* 3D Glass Pill Column */}
+              <div className="w-full max-w-[28px] h-28 bg-slate-200/40 rounded-full p-1 flex flex-col justify-end relative shadow-inner border border-white/60 group-hover/bar:border-blue-400/80 transition-colors">
                 <motion.div
-                  className="absolute inset-x-0 h-8 bg-gradient-to-b from-white/20 to-transparent"
-                  animate={{ y: ["-100%", "200%"] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "linear", delay: idx * 0.4 }}
-                />
-              </motion.div>
+                  className="w-full rounded-full bg-gradient-to-t from-blue-700 via-blue-500 to-blue-400 relative shadow-md"
+                  initial={{ height: "0%" }}
+                  animate={{ height: `${d.heightPercent}%` }}
+                  transition={{ duration: 1, delay: i * 0.1, ease: "easeOut" }}
+                >
+                  {/* Glass top cap highlight */}
+                  <div className="w-full h-2 rounded-t-full bg-white/50 backdrop-blur-sm" />
+                </motion.div>
+              </div>
 
-              {/* 3D Glass top ellipse cap for full 3D effect */}
-              <motion.div
-                className="absolute w-7 h-[7px] rounded-full z-10 border border-white/60"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 + idx * 0.1 }}
-                style={{
-                  bottom: `calc(${m.height} - 3px)`,
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(59,130,246,0.8) 100%)",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                }}
-              />
+              {/* Day Label */}
+              <span className="text-[10px] font-bold text-slate-500 font-sans mt-2 group-hover/bar:text-blue-600 transition-colors">
+                {d.day}
+              </span>
             </div>
-            <span className="text-[10px] font-extrabold mt-2.5 text-black group-hover:text-[#2563eb] transition-colors">
-              {m.day}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Analytics Modal */}
+      <AnimatePresence>
+        {isAnalyticsOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4"
+            onClick={() => setIsAnalyticsOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 15 }}
+              onClick={(e) => e.stopPropagation()}
+              className="p-6 rounded-3xl glass-neo-card w-full max-w-lg relative shadow-2xl border border-white"
+            >
+              <button
+                onClick={() => setIsAnalyticsOpen(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-slate-200/50 text-slate-500 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-2 rounded-2xl bg-blue-600 text-white shadow-md">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-slate-800 font-sans">
+                    Voice Interactions Analytics
+                  </h3>
+                  <p className="text-[10px] font-bold text-slate-500 font-sans">
+                    Weekly Voice Traffic Breakdown & Acoustic NLP Telemetry
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mb-5">
+                <div className="p-3 rounded-2xl glass-neo-inset text-center">
+                  <span className="text-[9px] font-extrabold uppercase text-slate-400 block">Total Queries</span>
+                  <span className="text-base font-black text-slate-900 font-mono mt-0.5 block">709</span>
+                </div>
+                <div className="p-3 rounded-2xl glass-neo-inset text-center">
+                  <span className="text-[9px] font-extrabold uppercase text-slate-400 block">Success Rate</span>
+                  <span className="text-base font-black text-emerald-600 font-mono mt-0.5 block">99.4%</span>
+                </div>
+                <div className="p-3 rounded-2xl glass-neo-inset text-center">
+                  <span className="text-[9px] font-extrabold uppercase text-slate-400 block">Avg Response</span>
+                  <span className="text-base font-black text-blue-600 font-mono mt-0.5 block">140ms</span>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setIsAnalyticsOpen(false)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
+

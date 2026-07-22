@@ -43,7 +43,7 @@ export function HudLedger() {
 
   return (
     <div
-      className="w-full overflow-hidden flex items-center transition-all duration-300"
+      className="w-full overflow-hidden flex items-center transition-all duration-300 relative z-50 select-none shrink-0"
       style={{
         height: 34,
         background: "#0f1e3d", // Deep navy blue background
@@ -53,7 +53,7 @@ export function HudLedger() {
     >
       {/* Fixed label */}
       <div
-        className="flex-shrink-0 flex items-center gap-2 px-4 h-full"
+        className="flex-shrink-0 flex items-center gap-2 px-4 h-full relative z-20 shadow-md"
         style={{ background: "#0f1e3d", borderRight: "1px solid rgba(37, 99, 235, 0.5)" }}
       >
         <span

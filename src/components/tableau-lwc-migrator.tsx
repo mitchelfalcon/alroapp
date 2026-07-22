@@ -34,7 +34,7 @@ const getGStyles = (darkMode?: boolean) => {
 
 export function TableauLwcMigrator({ darkMode }: { darkMode?: boolean }) {
   const G = getGStyles(darkMode);
-  const textPrimary = darkMode ? "#0f172a" : "#0d1f1a";
+  const textPrimary = darkMode ? "#0f172a" : "#080707";
   const textMuted = "#5b7290";
   const accentColor = "#2563eb"; // Tableau Blue
 

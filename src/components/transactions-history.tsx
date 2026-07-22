@@ -76,21 +76,21 @@ export function TransactionsHistory() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-[#7a9a8d] text-xs font-semibold uppercase tracking-wider mb-1">Recent</p>
-          <h3 className="text-[#1d3a2f] text-xl font-bold">Transactions History</h3>
+          <p className="text-[#514F4D] text-xs font-semibold uppercase tracking-wider mb-1">Recent</p>
+          <h3 className="text-[#080707] text-xl font-bold">Transactions History</h3>
         </div>
         <motion.button
           className="p-2 rounded-xl glass-neo-inset"
           whileHover={{ scale: 1.1 }}
         >
-          <MoreHorizontal className="w-4 h-4 text-[#4a7268]" />
+          <MoreHorizontal className="w-4 h-4 text-[#0176D3]" />
         </motion.button>
       </div>
 
       {/* Column labels */}
       <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 px-2 mb-3">
         {["Merchant", "Date", "Amount", "Change"].map((h) => (
-          <p key={h} className="text-[#7a9a8d] text-xs font-semibold uppercase tracking-wider">{h}</p>
+          <p key={h} className="text-[#514F4D] text-xs font-semibold uppercase tracking-wider">{h}</p>
         ))}
       </div>
 
@@ -120,14 +120,14 @@ export function TransactionsHistory() {
               >
                 {tx.initial}
               </motion.div>
-              <p className="text-[#1d3a2f] text-sm font-semibold truncate">{tx.merchant}</p>
+              <p className="text-[#080707] text-sm font-semibold truncate">{tx.merchant}</p>
             </div>
 
             {/* Date */}
-            <p className="text-[#7a9a8d] text-xs">{tx.date}</p>
+            <p className="text-[#514F4D] text-xs">{tx.date}</p>
 
             {/* Amount */}
-            <p className={`text-sm font-semibold ${tx.positive ? "text-[#009970]" : "text-[#1d3a2f]"}`}>
+            <p className={`text-sm font-semibold ${tx.positive ? "text-[#2E844A]" : "text-[#080707]"}`}>
               {tx.amount}
             </p>
 
@@ -135,7 +135,7 @@ export function TransactionsHistory() {
             <div className="flex items-center">
               <motion.span
                 className={`flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-semibold glass-neo-inset
-                  ${tx.positive ? "text-[#009970]" : "text-[#ef4444]"}`}
+                  ${tx.positive ? "text-[#2E844A]" : "text-[#BA0517]"}`}
                 whileHover={{ scale: 1.05 }}
               >
                 {tx.positive

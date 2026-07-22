@@ -15,20 +15,26 @@
     --emerald-light: #38bdf8;
     --emerald-glow: rgba(14, 165, 233, 0.3);
     
-    /* Glassmorphism System */
-    --glass-bg: rgba(255, 255, 255, 0.05); /* Adjusted for dark mode default */
-    --glass-bg-strong: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: rgba(14, 165, 233, 0.05);
+    /* Neumorphic 3D Floating Glass System */
+    --glass-bg: rgba(255, 255, 255, 0.78);
+    --glass-bg-strong: rgba(255, 255, 255, 0.92);
+    --glass-border: rgba(255, 255, 255, 0.98);
+    --glass-shadow: rgba(165, 185, 210, 0.35);
     
-    /* Dark Accents */
-    --bg: #020617;
-    --fg: #cbd5e1;
-    --border: rgba(14, 165, 233, 0.1);
+    /* Light Neumorphic Canvas Backdrop */
+    --bg: #edf2f8;
+    --fg: #1e293b;
+    --border: rgba(255, 255, 255, 0.9);
   }
 
   body {
     background-color: var(--bg);
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(224, 238, 255, 0.8) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(243, 232, 255, 0.6) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(220, 252, 231, 0.5) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(238, 242, 255, 0.7) 0px, transparent 50%);
+    background-attachment: fixed;
     color: var(--fg);
     font-family: var(--font-sans);
     font-size: 14px;
@@ -197,20 +203,99 @@
 }
 
 /* Glassmorphic Neumorphic hybrid card classes as requested */
+/* =========================================================
+   UI ARQUITECTURA: TARJETA NEUMÓRFICA FLOTANTE / GLASS3D
+   Estilo limpio, redondeado y flotante con sombras duales
+========================================================= */
+
 .glass-neo-card {
-  background: rgba(240, 246, 255, 0.48) !important;
-  backdrop-filter: blur(24px) !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.7) !important;
-  box-shadow: 14px 14px 32px rgba(150, 175, 205, 0.32), -14px -14px 32px rgba(255, 255, 255, 0.95), inset 3px 3px 6px rgba(255, 255, 255, 0.8), inset -3px -3px 6px rgba(150, 175, 205, 0.15) !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.98) !important;
+  border-radius: 28px !important;
+  box-shadow: 14px 14px 32px rgba(165, 185, 210, 0.38), -12px -12px 28px rgba(255, 255, 255, 0.98), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.95) !important;
+  transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
   font-family: 'Segoe UI', -apple-system, sans-serif !important;
 }
 
-.glass-neo-inset {
-  background: rgba(225, 236, 248, 0.45) !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
-  box-shadow: inset 4px 4px 10px rgba(150, 175, 205, 0.35), inset -4px -4px 10px rgba(255, 255, 255, 0.9) !important;
+.glass-neo-card:hover {
+  transform: translateY(-5px) scale(1.008) !important;
+  box-shadow: 20px 20px 42px rgba(165, 185, 210, 0.48), -16px -16px 36px rgba(255, 255, 255, 1), inset 1.5px 1.5px 3px rgba(255, 255, 255, 1) !important;
 }
+
+.glass-neo-inset {
+  background: rgba(240, 245, 252, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 3px 3px 7px rgba(165, 185, 210, 0.28), inset -3px -3px 7px rgba(255, 255, 255, 0.95), 1px 1px 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+.glass-neo-pill {
+  background: rgba(243, 247, 252, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 4px 4px 10px rgba(165, 185, 210, 0.28), -3px -3px 8px rgba(255, 255, 255, 0.95) !important;
+  border-radius: 9999px !important;
+  font-weight: 700 !important;
+  transition: all 0.25s ease !important;
+}
+
+.glass-neo-pill:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 6px 6px 14px rgba(165, 185, 210, 0.38), -4px -4px 10px rgba(255, 255, 255, 1) !important;
+}
+
+/* Harmonized Neumorphic Icon Container */
+.glass-neo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(240, 246, 255, 0.85));
+  border: 1px solid rgba(255, 255, 255, 1);
+  box-shadow: 5px 5px 12px rgba(165, 185, 210, 0.32), -4px -4px 10px rgba(255, 255, 255, 0.98);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-neo-icon:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 7px 7px 16px rgba(165, 185, 210, 0.42), -5px -5px 12px rgba(255, 255, 255, 1);
+}
+
+/* Floating Action Button */
+.glass-neo-button {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 20px !important;
+  box-shadow: 6px 6px 18px rgba(37, 99, 235, 0.35), -4px -4px 12px rgba(255, 255, 255, 0.9) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.glass-neo-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 8px 8px 24px rgba(37, 99, 235, 0.48), -5px -5px 14px rgba(255, 255, 255, 1) !important;
+}
+
+.glass-neo-button:active {
+  transform: translateY(0) !important;
+  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Floating 3D ambient animation for cards */
+@keyframes neoFloatGentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.neo-float-gentle {
+  animation: neoFloatGentle 6s ease-in-out infinite;
+}
+
 
 
 

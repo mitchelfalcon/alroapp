@@ -42,6 +42,8 @@ interface SidebarProps {
   setSelectedNode: (node: ArchitectureNode) => void;
   activeTool: string;
   onToolChange: (tool: string) => void;
+  onToggleVoicePortal?: () => void;
+  isVoicePortalOpen?: boolean;
 }
 
 const AURA_NODES_LOCAL = [
@@ -69,6 +71,8 @@ export function SidebarGlass({
   setSelectedNode,
   activeTool,
   onToolChange,
+  onToggleVoicePortal,
+  isVoicePortalOpen,
 }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isOperationalControlOpen, setIsOperationalControlOpen] = useState(true);
@@ -95,7 +99,7 @@ export function SidebarGlass({
   );
 
   return (
-    <div className="flex gap-4 sticky top-0 h-screen py-5 pl-5 flex-shrink-0 z-40 select-none pointer-events-auto">
+    <div className="flex gap-4 sticky top-[34px] h-[calc(100vh-34px)] py-3 pl-5 flex-shrink-0 z-40 select-none pointer-events-auto">
       
       {/* ─── PRIMARY SIDEBAR (EDGE-LEFT) ─── */}
       <div
@@ -179,71 +183,40 @@ export function SidebarGlass({
           })}
         </div>
 
-        {/* Bottom Section: Profile Avatar & Migrated Floating Toolbar */}
-        <div className="flex flex-col items-center gap-3.5 w-full mt-auto">
-          {/* Profile Avatar */}
+        {/* Bottom Section: Floating Voice Microphone Orb */}
+        <div className="flex flex-col items-center gap-3.5 w-full mt-auto pb-2">
           <div className="relative group flex justify-center">
+            {/* Radiating soundwave rings */}
+            <motion.div
+              className="absolute -inset-3 rounded-full bg-blue-500/20 blur-md pointer-events-none"
+              animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.7, 0.3] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            />
             <motion.button
-              onClick={() => onSelectSection("admin")}
-              className="w-11 h-11 rounded-full flex items-center justify-center relative bg-white border border-white/90 shadow-[3px_3px_8px_rgba(165,185,210,0.3),-3px_-3px_8px_rgba(255,255,255,0.95)] transition-all duration-200 text-[#009fdb] cursor-pointer"
-              whileHover={{ scale: 1.05 }}
+              onClick={() => {
+                setVoiceActive(!voiceActive);
+                if (onToggleVoicePortal) onToggleVoicePortal();
+              }}
+              className="w-12 h-12 rounded-full flex items-center justify-center relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 border-2 border-white/90 shadow-[0_8px_20px_rgba(37,99,235,0.4)] transition-all duration-200 text-white cursor-pointer"
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <User className="w-5 h-5 text-[#009fdb]" />
+              <Mic className="w-5 h-5 text-white" />
+              {/* Sound wave rings graphics */}
+              <div className="absolute -left-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 pointer-events-none">
+                <span className="w-1 h-3 rounded-full bg-blue-400/80 animate-pulse" />
+                <span className="w-1 h-5 rounded-full bg-blue-300/80 animate-pulse delay-100" />
+              </div>
             </motion.button>
+
             <div className="absolute left-16 top-1/2 -translate-y-1/2 pl-3 opacity-0 group-hover:opacity-100 transition-all pointer-events-none duration-200 z-50 whitespace-nowrap">
-              <div className="px-3 py-1.5 rounded-xl text-[10px] font-bold text-white bg-slate-900/90 backdrop-blur-md shadow-lg border border-slate-700/55">
-                Admin Profile
+              <div className="px-3 py-1.5 rounded-xl text-[10px] font-bold text-white bg-slate-900/90 backdrop-blur-md shadow-lg border border-slate-700/55 flex items-center gap-1.5 font-sans">
+                <span>Voice Command Activation</span>
+                <span className="text-[8px] bg-blue-500/30 text-blue-200 px-1.5 py-0.5 rounded-md font-extrabold uppercase">
+                  {voiceActive ? "ACTIVE" : "STANDBY"}
+                </span>
               </div>
             </div>
-          </div>
-
-          {/* Simple Divider */}
-          <div className="w-8 h-px bg-blue-100/50" />
-
-          {/* Migrated Floating Toolbar */}
-          <div className="flex flex-col items-center gap-1 w-full">
-            {tools.map((tool, i) => {
-              const Icon = tool.icon;
-              const isActive = activeTool === tool.id;
-              return (
-                <div key={tool.id} className="relative group flex justify-center">
-                  <motion.button
-                    onClick={() => onToolChange(tool.id)}
-                    title={tool.label}
-                    className="w-9 h-9 rounded-[14px] flex items-center justify-center relative transition-all duration-150 border cursor-pointer"
-                    style={{
-                      background: "#eff6ff",
-                      borderColor: isActive ? "rgba(30,58,138,0.2)" : "rgba(255,255,255,0.5)",
-                      boxShadow: isActive
-                        ? "inset 2px 2px 4px #cbd5e1, inset -2px -2px 4px #ffffff"
-                        : "2px 2px 4px #cbd5e1, -2px -2px 4px #ffffff",
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Icon className="w-4 h-4" style={{ color: isActive ? "#1e3a8a" : "#475569" }} />
-                  </motion.button>
-                  <div className="absolute left-16 top-1/2 -translate-y-1/2 pl-3 opacity-0 group-hover:opacity-100 transition-all pointer-events-none duration-200 z-50 whitespace-nowrap">
-                    <div className="px-2.5 py-1.5 rounded-xl text-[10px] font-bold text-white bg-slate-900/90 backdrop-blur-md shadow-lg border border-slate-700/55">
-                      {tool.label}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-
-            <div className="w-5 h-px my-1" style={{ background: "rgba(30,58,138,0.14)" }} />
-
-            <motion.div
-              className="px-1.5 py-1 rounded-xl text-center cursor-default"
-              style={{ background: "rgba(30,58,138,0.05)" }}
-              animate={{ opacity: [1, 0.65, 1] }}
-              transition={{ duration: 2.6, repeat: Infinity }}
-            >
-              <span className="text-[8px] font-bold block font-mono" style={{ color: "#1e3a8a" }}>94%</span>
-              <span className="text-[7px] block" style={{ color: "#475569" }}>CONF</span>
-            </motion.div>
           </div>
         </div>
       </div>

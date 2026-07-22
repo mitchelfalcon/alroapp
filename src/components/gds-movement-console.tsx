@@ -280,14 +280,14 @@ const FormulaOverlay: React.FC<{
   const accent = section?.color ?? (darkMode ? "#2563eb" : "#1e3a8a");
   const G = getGStyles(darkMode);
 
-  const textPrimary = darkMode ? "#0f172a" : "#0d1f1a";
-  const textMuted = "#5b7290";
+  const textPrimary = darkMode ? "#0f172a" : "#080707";
+  const textMuted = "#514F4D";
   const textMutedDark = darkMode ? "#334155" : "#1e3a8a";
 
   return (
     <motion.div
       className="fixed inset-0 z-[130] flex items-center justify-center p-6"
-      style={{ backdropFilter: "blur(16px)", background: darkMode ? "rgba(165, 185, 210, 0.45)" : "rgba(178,196,189,0.55)" }}
+      style={{ backdropFilter: "blur(16px)", background: darkMode ? "rgba(165, 185, 210, 0.45)" : "rgba(8, 38, 54, 0.45)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -481,7 +481,7 @@ export function GdsMovementConsole({
   const [activeAlgo, setActiveAlgo]   = useState<AlgoDef | null>(null);
   const [showFormula, setShowFormula] = useState(false);
 
-  const textPrimary = darkMode ? "#0f172a" : "#0d1f1a";
+  const textPrimary = darkMode ? "#0f172a" : "#080707";
   const textMuted = "#5b7290";
   const iconColor = "#2563eb";
   

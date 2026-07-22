@@ -10,7 +10,7 @@ import {
   Maximize2, Share2, Mic, Check, Building2, BarChart2, PieChart,
   LineChart, CreditCard, Award, List, Layers, Radio, Hand,
   MousePointer, Plus, GitBranch, Play, Search, Settings, Cloud, Cpu,
-  Eye, Filter, Link2, TrendingUp, Send, MicOff, Sparkles, Calendar, Volume2
+  Eye, Filter, Link2, TrendingUp, Send, MicOff, Sparkles, Calendar, Volume2, Moon, Sun, User
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -52,8 +52,8 @@ import { WorkerSessionsCard }      from "./components/worker-sessions-card";
 import { VoiceCommandQueue }       from "./components/voice-command-queue";
 import { MilestonesTimeline }      from "./components/milestones-timeline";
 import { CustomMicVoiceIcon }       from "./components/custom-voice-icon";
+import { VoiceCreationSessionCard } from "./components/voice-creation-session-card";
 import { RecentActivityLive }      from "./components/recent-activity-live";
-import { TableauLwcMigrator }      from "./components/tableau-lwc-migrator";
 
 // @ts-ignore
 import logoSphere from "./imports/Firefly_1.png";
@@ -98,31 +98,33 @@ const WORKSLOP_RADAR = [
 // ─── Operational Glass style constants ───────────────────────────────────────────────
 const GLOBAL_G: Record<string, React.CSSProperties> = {
   card: {
-    background: "rgba(240, 246, 255, 0.48)",
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    border: "1px solid rgba(255, 255, 255, 0.7)",
-    boxShadow: "10px 10px 24px rgba(150, 175, 205, 0.28), -10px -10px 24px rgba(255, 255, 255, 0.95), inset 2px 2px 5px rgba(255, 255, 255, 0.75), inset -2px -2px 5px rgba(150, 175, 205, 0.12)",
-  },
-  cardDeep: {
-    background: "rgba(238, 245, 255, 0.55)",
+    background: "rgba(255, 255, 255, 0.72)",
     backdropFilter: "blur(28px)",
     WebkitBackdropFilter: "blur(28px)",
-    border: "1px solid rgba(255, 255, 255, 0.75)",
-    boxShadow: "14px 14px 32px rgba(150, 175, 205, 0.32), -14px -14px 32px rgba(255, 255, 255, 0.95), inset 3px 3px 6px rgba(255, 255, 255, 0.8), inset -3px -3px 6px rgba(150, 175, 205, 0.15)",
+    border: "1px solid rgba(255, 255, 255, 0.95)",
+    boxShadow: "14px 14px 30px rgba(165, 185, 210, 0.35), -14px -14px 30px rgba(255, 255, 255, 0.98), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.95)",
+    borderRadius: "24px",
+  },
+  cardDeep: {
+    background: "rgba(255, 255, 255, 0.85)",
+    backdropFilter: "blur(28px)",
+    WebkitBackdropFilter: "blur(28px)",
+    border: "1px solid rgba(255, 255, 255, 0.95)",
+    boxShadow: "18px 18px 36px rgba(165, 185, 210, 0.4), -18px -18px 36px rgba(255, 255, 255, 0.98), inset 2px 2px 4px rgba(255, 255, 255, 0.95)",
+    borderRadius: "24px",
   },
   inset: {
-    background: "rgba(225, 236, 248, 0.45)",
-    border: "1px solid rgba(255, 255, 255, 0.45)",
-    boxShadow: "inset 4px 4px 10px rgba(150, 175, 205, 0.35), inset -4px -4px 10px rgba(255, 255, 255, 0.9)",
-    borderRadius: 12,
+    background: "rgba(243, 247, 252, 0.85)",
+    border: "1px solid rgba(255, 255, 255, 0.9)",
+    boxShadow: "inset 2px 2px 5px rgba(165, 185, 210, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.8)",
+    borderRadius: 16,
   },
   nav: {
-    background: "rgba(244, 248, 253, 0.65)",
+    background: "rgba(243, 245, 249, 0.85)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.65)",
-    boxShadow: "0 6px 24px rgba(150, 175, 205, 0.18)",
+    borderBottom: "1px solid #DDDBDA",
+    boxShadow: "0 2px 8px rgba(1, 118, 211, 0.08)",
   },
   analyticsCard: {
     padding: "1.25rem",
@@ -139,31 +141,33 @@ const GLOBAL_G: Record<string, React.CSSProperties> = {
 
 const GD: Record<string, React.CSSProperties> = {
   card: {
-    background: "rgba(240, 246, 255, 0.48)",
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    border: "1px solid rgba(255, 255, 255, 0.7)",
-    boxShadow: "10px 10px 24px rgba(150, 175, 205, 0.28), -10px -10px 24px rgba(255, 255, 255, 0.95), inset 2px 2px 5px rgba(255, 255, 255, 0.75), inset -2px -2px 5px rgba(150, 175, 205, 0.12)",
-  },
-  cardDeep: {
-    background: "rgba(238, 245, 255, 0.55)",
+    background: "rgba(255, 255, 255, 0.72)",
     backdropFilter: "blur(28px)",
     WebkitBackdropFilter: "blur(28px)",
-    border: "1px solid rgba(255, 255, 255, 0.75)",
-    boxShadow: "14px 14px 32px rgba(150, 175, 205, 0.32), -14px -14px 32px rgba(255, 255, 255, 0.95), inset 3px 3px 6px rgba(255, 255, 255, 0.8), inset -3px -3px 6px rgba(150, 175, 205, 0.15)",
+    border: "1px solid rgba(255, 255, 255, 0.95)",
+    boxShadow: "14px 14px 30px rgba(165, 185, 210, 0.35), -14px -14px 30px rgba(255, 255, 255, 0.98), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.95)",
+    borderRadius: "24px",
+  },
+  cardDeep: {
+    background: "rgba(255, 255, 255, 0.85)",
+    backdropFilter: "blur(28px)",
+    WebkitBackdropFilter: "blur(28px)",
+    border: "1px solid rgba(255, 255, 255, 0.95)",
+    boxShadow: "18px 18px 36px rgba(165, 185, 210, 0.4), -18px -18px 36px rgba(255, 255, 255, 0.98), inset 2px 2px 4px rgba(255, 255, 255, 0.95)",
+    borderRadius: "24px",
   },
   inset: {
-    background: "rgba(225, 236, 248, 0.45)",
-    border: "1px solid rgba(255, 255, 255, 0.45)",
-    boxShadow: "inset 4px 4px 10px rgba(150, 175, 205, 0.35), inset -4px -4px 10px rgba(255, 255, 255, 0.9)",
-    borderRadius: 12,
+    background: "rgba(243, 247, 252, 0.85)",
+    border: "1px solid rgba(255, 255, 255, 0.9)",
+    boxShadow: "inset 2px 2px 5px rgba(165, 185, 210, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.8)",
+    borderRadius: 16,
   },
   nav: {
-    background: "rgba(244, 248, 253, 0.65)",
+    background: "rgba(243, 245, 249, 0.85)",
     backdropFilter: "blur(20px)",
     WebkitBackdropFilter: "blur(20px)",
-    borderBottom: "1px solid rgba(255, 255, 255, 0.65)",
-    boxShadow: "0 6px 24px rgba(150, 175, 205, 0.18)",
+    borderBottom: "1px solid #DDDBDA",
+    boxShadow: "0 2px 8px rgba(1, 118, 211, 0.08)",
   },
   analyticsCard: {
     padding: "1.25rem",
@@ -714,7 +718,7 @@ const NodeContextMenu: React.FC<{
               animate={{ scale: [1, 1.4, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             />
-            <span className="text-sm font-bold" style={{ color: "#0d1f1a" }}>{node.name}</span>
+            <span className="text-sm font-bold" style={{ color: "#080707" }}>{node.name}</span>
             <span className="text-[10px] px-1.5 py-0.5 rounded-full font-mono"
               style={{ background: `${node.color}12`, color: node.color }}>
               {node.confidence}%
@@ -722,11 +726,11 @@ const NodeContextMenu: React.FC<{
           </div>
           <motion.button onClick={onClose}
             className="w-6 h-6 rounded-lg flex items-center justify-center"
-            style={{ background: "rgba(16,185,129,0.06)" }}
-            whileHover={{ scale: 1.12, background: "rgba(239,68,68,0.07)" }}
+            style={{ background: "rgba(1, 118, 211, 0.08)" }}
+            whileHover={{ scale: 1.12, background: "rgba(239, 68, 68, 0.1)" }}
             whileTap={{ scale: 0.9 }}
           >
-            <X className="w-3 h-3" style={{ color: "#7a9a8d" }} />
+            <X className="w-3 h-3" style={{ color: "#0176D3" }} />
           </motion.button>
         </div>
 
@@ -750,13 +754,13 @@ const NodeContextMenu: React.FC<{
                   <Icon className="w-3.5 h-3.5" style={{ color: node.color }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[12px] font-semibold" style={{ color: "#0d1f1a" }}>{opt.label}</p>
-                  <p className="text-[10px]" style={{ color: "#7a9a8d" }}>{opt.desc}</p>
+                  <p className="text-[12px] font-semibold" style={{ color: "#080707" }}>{opt.label}</p>
+                  <p className="text-[10px]" style={{ color: "#514F4D" }}>{opt.desc}</p>
                 </div>
                 {opt.id === "link" && (
                   <motion.span
                     className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold"
-                    style={{ background: "rgba(6,182,212,0.10)", color: "#06b6d4", display: "inline-block" }}
+                    style={{ background: "rgba(1, 118, 211, 0.12)", color: "#0176D3", display: "inline-block" }}
                     animate={{
                       scale: [1, 1.12, 1, 1.12, 1],
                       opacity: [1, 0.85, 1, 0.85, 1],
@@ -776,9 +780,9 @@ const NodeContextMenu: React.FC<{
           })}
         </div>
 
-        <div className="px-4 py-2" style={{ borderTop: "1px solid rgba(16,185,129,0.07)" }}>
+        <div className="px-4 py-2" style={{ borderTop: "1px solid #DDDBDA" }}>
           <span className="text-[9px] uppercase tracking-widest font-mono"
-            style={{ color: "rgba(16,185,129,0.4)" }}>
+            style={{ color: "#514F4D" }}>
             CTRL+CLICK para selección múltiple
           </span>
         </div>
@@ -956,7 +960,7 @@ function ApiGatewayPorts({ tick, darkMode }: { tick: number; darkMode?: boolean 
                   <Icon className="w-4 h-4" style={{ color: port.accent }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold leading-none mb-0.5" style={{ color: darkMode ? "#ffffff" : "#0d1f1a" }}>{port.name}</p>
+                  <p className="text-xs font-bold leading-none mb-0.5" style={{ color: darkMode ? "#ffffff" : "#080707" }}>{port.name}</p>
                   <p className="text-[9px]" style={{ color: darkMode ? "#94a3b8" : "#5b7290" }}>{port.subtitle}</p>
                 </div>
                 <motion.div className="w-2 h-2 rounded-full"
@@ -1087,7 +1091,8 @@ export default function App() {
   const [activeAppMode, setActiveAppMode] = useState<'architecture' | 'operational'>('operational');
 
   // Shadow global style constant G locally based on mode
-  const isDark = false; // "No dark mode elements. ALRO Supreme - Arquitectura Page in light mode."
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const isDark = isDarkMode;
   const G = GLOBAL_G;
 
   // --- Chat/Voice state & handles
@@ -1125,6 +1130,7 @@ export default function App() {
   const [calendarTab, setCalendarTab]         = useState<'Today' | 'Week' | 'Month' | 'Year'>('Week');
   const [isArchOpen, setIsArchOpen]           = useState(false);
   const [isOpsOpen, setIsOpsOpen]             = useState(true);
+  const [showVoicePortal, setShowVoicePortal] = useState(false);
   const [micFrequencies, setMicFrequencies]   = useState<number[]>(new Array(16).fill(0));
 
   const getRevenueValue = (node: typeof AURA_NODES[number]) => {
@@ -2180,7 +2186,7 @@ export default function App() {
 
           <div className="relative z-10">
             {/* Sticky header */}
-          <div className="sticky top-0 z-30">
+          <div className="sticky top-0 z-50 w-full bg-[#0f1e3d] shadow-sm">
             <HudLedger />
           </div>
 
@@ -2205,9 +2211,337 @@ export default function App() {
               setSelectedNode={setSelectedNode}
               activeTool={activeTool}
               onToolChange={handleToolChange}
+              onToggleVoicePortal={() => setShowVoicePortal(prev => !prev)}
+              isVoicePortalOpen={showVoicePortal}
             />
 
-            {activeAppMode === 'architecture' ? (
+            {activeSection === 'documents' ? (
+              /* DEDICATED FULL VIEW: GDS & ALGORITHM CONSOLE / ANALYTICS GRID & TRI-GATEWAY HUB */
+              <div className="flex-1 p-6 space-y-6 overflow-y-auto h-[calc(100vh-72px)] pb-32 font-sans select-none">
+                
+                {/* TOP CONSOLE HEADER matching Image 1 */}
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-3xl flex flex-wrap items-center justify-between gap-4"
+                  style={{
+                    background: "rgba(240, 246, 255, 0.55)",
+                    backdropFilter: "blur(24px)",
+                    WebkitBackdropFilter: "blur(24px)",
+                    border: "1px solid rgba(255, 255, 255, 0.75)",
+                    boxShadow: "10px 10px 24px rgba(150, 175, 205, 0.22), -10px -10px 24px rgba(255, 255, 255, 0.95)",
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                      <FileText className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h1 className="text-sm font-black text-blue-950 uppercase tracking-wider font-mono">
+                        GDS & ALGORITHM CONSOLE
+                      </h1>
+                      <p className="text-[10px] text-slate-500 font-medium">
+                        Documentación de Flujos, Algoritmos Graph y Tri-Gateway API
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Filter Dropdowns (Paths, Central, Clusters, Similar, GML) */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {["Paths", "Central", "Clusters", "Similar", "GML"].map((filter) => (
+                      <div key={filter} className="relative">
+                        <button 
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/60 border border-white/90 text-xs font-bold text-blue-900 shadow-xs hover:bg-white transition-all cursor-pointer"
+                        >
+                          <Filter className="w-3 h-3 text-[#0176D3]" />
+                          <span>{filter}</span>
+                          <ChevronDown className="w-3 h-3 text-[#0176D3]" />
+                        </button>
+                      </div>
+                    ))}
+
+                    {/* Horizontal Toolbar Section (Moved from vertical orientation) */}
+                    <div className="flex items-center gap-1 p-1 rounded-2xl bg-white/70 border border-white/90 shadow-xs backdrop-blur-md px-1.5 py-1">
+                      {[
+                        { id: "cursor",   icon: MousePointer,  label: "Selección precisa" },
+                        { id: "add-kpi",  icon: Plus,          label: "+KPI — Nueva Entidad" },
+                        { id: "link",     icon: GitBranch,     label: "Enlazar Flujo" },
+                        { id: "play",     icon: Play,          label: "Ejecutar / Recalcular Grafo" },
+                        { id: "search",   icon: Search,        label: "Buscar KPIs / Incidencias" },
+                        { id: "settings", icon: Settings,      label: "Umbrales · Confianza 94%" },
+                      ].map((tool) => {
+                        const Icon = tool.icon;
+                        const isActive = activeTool === tool.id;
+                        return (
+                          <motion.button
+                            key={tool.id}
+                            onClick={() => handleToolChange(tool.id)}
+                            title={tool.label}
+                            className="w-8 h-8 rounded-xl flex items-center justify-center relative group transition-all duration-150 border cursor-pointer"
+                            style={{
+                              background: isActive ? "#0176D3" : "#eff6ff",
+                              borderColor: isActive ? "#0176D3" : "rgba(255,255,255,0.8)",
+                              boxShadow: isActive
+                                ? "inset 2px 2px 4px rgba(0,0,0,0.2), inset -1px -1px 3px rgba(255,255,255,0.3)"
+                                : "1px 1px 3px #cbd5e1, -1px -1px 3px #ffffff",
+                            }}
+                            whileHover={{ scale: 1.08 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <Icon className="w-3.5 h-3.5" style={{ color: isActive ? "#ffffff" : "#0176D3" }} />
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+
+                    <button 
+                      onClick={() => setActiveSection("dashboard")}
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-[#0176D3] text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#014486] transition-all cursor-pointer ml-1"
+                    >
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>▼ TABLEAU NETWORK</span>
+                    </button>
+                  </div>
+                </motion.div>
+
+                {/* 4 TOP ANALYTICS KPI METRICS (TOTAL REVENUE, TOTAL USERS, TOTAL ORDERS, GROWTH VELOCITY) */}
+                <motion.div 
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+                  initial={{ opacity: 0, y: 10 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  transition={{ delay: 0.08 }}
+                >
+                  {/* Total Revenue */}
+                  <motion.div 
+                    className="rounded-2xl flex flex-col justify-between p-5"
+                    style={{ ...G.card }}
+                    whileHover={{ scale: 1.02, boxShadow: "0 8px 24px rgba(1, 118, 211, 0.15)" }}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 rounded-xl" style={G.inset}>
+                          <DollarSign className="w-4.5 h-4.5 text-[#0176D3]" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#514F4D]">Total Revenue</p>
+                          <motion.p 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
+                            transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
+                            className="text-2xl font-bold tracking-tight text-[#080707]"
+                          >
+                            $54,239
+                          </motion.p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold flex items-center gap-0.5 text-[#2E844A] bg-[#2E844A]/10 px-1.5 py-0.5 rounded-lg border border-[#2E844A]/20 font-sans">
+                        <ArrowUpRight className="w-3 h-3" />
+                        +12.5%
+                      </span>
+                    </div>
+                  </motion.div>
+
+                  {/* Total Users */}
+                  <motion.div 
+                    className="rounded-2xl flex flex-col justify-between p-5"
+                    style={{ ...G.card }}
+                    whileHover={{ scale: 1.02, boxShadow: "0 8px 24px rgba(1, 118, 211, 0.15)" }}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 rounded-xl" style={G.inset}>
+                          <Users className="w-4.5 h-4.5 text-[#0176D3]" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#514F4D]">Total Users</p>
+                          <motion.p 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
+                            transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
+                            className="text-2xl font-bold tracking-tight text-[#080707]"
+                          >
+                            8,235
+                          </motion.p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold flex items-center gap-0.5 text-[#2E844A] bg-[#2E844A]/10 px-1.5 py-0.5 rounded-lg border border-[#2E844A]/20 font-sans">
+                        <ArrowUpRight className="w-3 h-3" />
+                        +8.2%
+                      </span>
+                    </div>
+                  </motion.div>
+
+                  {/* Total Orders */}
+                  <motion.div 
+                    className="rounded-2xl flex flex-col justify-between p-5"
+                    style={{ ...G.card }}
+                    whileHover={{ scale: 1.02, boxShadow: "0 8px 24px rgba(1, 118, 211, 0.15)" }}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 rounded-xl" style={G.inset}>
+                          <ShoppingCart className="w-4.5 h-4.5 text-[#0176D3]" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#514F4D]">Total Orders</p>
+                          <motion.p 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
+                            transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
+                            className="text-2xl font-bold tracking-tight text-[#080707]"
+                          >
+                            1,423
+                          </motion.p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold flex items-center gap-0.5 text-[#BA0517] bg-[#BA0517]/10 px-1.5 py-0.5 rounded-lg border border-[#BA0517]/20 font-sans">
+                        <ArrowDownRight className="w-3 h-3" />
+                        -3.1%
+                      </span>
+                    </div>
+                  </motion.div>
+
+                  {/* Growth Velocity */}
+                  <motion.div 
+                    className="rounded-2xl flex flex-col justify-between p-5"
+                    style={{ ...G.card }}
+                    whileHover={{ scale: 1.02, boxShadow: "0 8px 24px rgba(1, 118, 211, 0.15)" }}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-2 rounded-xl" style={G.inset}>
+                          <TrendingUp className="w-4.5 h-4.5 text-[#0176D3]" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#514F4D]">Growth Velocity</p>
+                          <motion.p 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
+                            transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
+                            className="text-2xl font-bold tracking-tight text-[#080707]"
+                          >
+                            23.5%
+                          </motion.p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold flex items-center gap-0.5 text-[#2E844A] bg-[#2E844A]/10 px-1.5 py-0.5 rounded-lg border border-[#2E844A]/20 font-sans">
+                        <ArrowUpRight className="w-3 h-3" />
+                        +4.3%
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
+
+                {/* ANALYTICS HEADER & EXPAND/COLLAPSE ALL CONTROL */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="p-5 rounded-3xl space-y-4" 
+                  style={G.card}
+                >
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-2">
+                      <Layers className="w-4 h-4 text-blue-600" />
+                      <span className="text-xs font-extrabold uppercase tracking-widest text-[#1e3a8a] font-mono">
+                        ANALYTICS — CLICK ANY CARD PARA EXPANDIR · DI EL NOMBRE POR VOZ
+                      </span>
+                    </div>
+
+                    <motion.button
+                      onClick={() => setExpandAllCards(p => !p)}
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl font-bold border text-xs shadow-xs transition-all duration-200 cursor-pointer"
+                      style={{
+                        ...G.card,
+                        background: expandAllCards ? "rgba(37, 99, 235, 0.12)" : "rgba(255,255,255,0.7)",
+                        borderColor: expandAllCards ? "rgba(37, 99, 235, 0.45)" : "rgba(37, 99, 235, 0.2)",
+                        color: "#1e3a8a",
+                      }}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold">
+                        {expandAllCards ? "▲ Colapsar Todo" : "▼ Expandir Todo"}
+                      </span>
+                    </motion.button>
+                  </div>
+
+                  {/* 11 ANALYTICS CARDS GRID */}
+                  {expandAllCards ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {ANALYTICS_CARDS.map((card, i) => (
+                        <motion.div key={card.id}
+                          className="p-5 rounded-3xl"
+                          style={{
+                            ...G.cardDeep,
+                            border: `1.5px solid ${card.color}25`,
+                          }}
+                          initial={{ opacity: 0, y: 15 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.03 }}
+                        >
+                          <div className="flex items-center justify-between pb-3 mb-4"
+                            style={{ borderBottom: "1px solid rgba(37,99,235,0.08)" }}>
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <div className="w-1.5 h-4 rounded-full" style={{ background: card.color }} />
+                                <h3 className="text-base font-bold" style={{ color: "#080707" }}>{card.title}</h3>
+                              </div>
+                              <p className="text-xs text-slate-500">{card.subtitle}</p>
+                            </div>
+                            <span className="text-xs font-bold px-2.5 py-1 rounded-full font-sans"
+                              style={{ background: `${card.color}10`, color: card.color }}>
+                              {card.metric}
+                            </span>
+                          </div>
+                          <div className="p-1">{EXPANDED_COMPONENTS[card.id]}</div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {ANALYTICS_CARDS.map((card, i) => (
+                        <motion.div key={card.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.03 }}
+                        >
+                          <CompactCard
+                            card={card}
+                            onExpand={() => setExpandedCard(card.id)}
+                            voiceHighlight={voiceHighlight === card.id}
+                            darkMode={isDark}
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* TRI-GATEWAY HUB — API CONNECTIONS */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="space-y-3"
+                >
+                  <div className="flex items-center justify-between px-1">
+                    <div className="flex items-center gap-2">
+                      <Database className="w-4 h-4 text-blue-600" />
+                      <h2 className="text-xs font-bold uppercase tracking-widest text-blue-950 font-mono">
+                        TRI-GATEWAY HUB — API CONNECTIONS
+                      </h2>
+                    </div>
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/50 shadow-xs">
+                      3 SLOTS ACTIVE
+                    </span>
+                  </div>
+
+                  <ApiGatewayPorts tick={gatewayTick} darkMode={isDark} />
+                </motion.div>
+
+              </div>
+            ) : activeAppMode === 'architecture' ? (
               /* DEDICATED NEUMORPHIC & GLASSMORPHISM ARCHITECTURE VIEW (100% Segoe UI, Light Mode) */
               <div className="flex flex-1 min-h-screen relative font-sans">
                 {/* Main panel - Structured as Top Header -> Calendar Widget -> Structured KPI Metric Cards Grid */}
@@ -2492,295 +2826,115 @@ export default function App() {
             ) : (
               /* MAIN DASHBOARD CONTENT AREA */
               <div className="flex-1 p-6 pb-36 pr-10 overflow-x-hidden relative">
-              
-              {/* Welcome strip */}
-              <motion.div className="flex items-center justify-between mb-6"
-                initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-                <div>
-                  <h2 className="text-xl font-bold uppercase tracking-wider font-mono text-[#1e3a8a]">{currentDept} System Status</h2>
-                </div>
-              </motion.div>
 
-              {/* CORE DASHBOARD GRID: Left Main Columns + Right Metrics Column */}
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start"
-              >
-                
-                {/* Left Columns (3/4 of screen width) */}
-                <div className="lg:col-span-3 space-y-6">
-                  
-                  {/* Top 4 Modular Cards Row (Grouped Voice & Sync Suite) */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                    
-                    {/* Card 1: Voice Session (Interactive Glassmorphic 3D Voice Portal) */}
-                    <motion.div
-                      variants={itemVariants}
-                      className="p-5 rounded-3xl flex flex-col justify-between min-h-[260px] relative overflow-hidden"
-                      style={{
-                        background: "rgba(255, 255, 255, 0.55)",
-                        backdropFilter: "blur(24px)",
-                        WebkitBackdropFilter: "blur(24px)",
-                        border: "1px solid rgba(255, 255, 255, 0.9)",
-                        boxShadow: "14px 14px 30px rgba(165, 185, 210, 0.4), -14px -14px 30px rgba(255, 255, 255, 0.95), inset 1px 1px 3px rgba(255, 255, 255, 0.95)",
-                      }}
+                {/* TOP HEADER BAR */}
+                <div className="flex items-center justify-between mb-6">
+                  {/* Left Title */}
+                  <div>
+                    <h1 className="text-xl font-black text-slate-800 tracking-tight font-sans">
+                      Dashboard
+                    </h1>
+                  </div>
+
+                  {/* Center Header Pill */}
+                  <div className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full glass-neo-inset border border-white/80">
+                    <span className="text-xs font-bold text-slate-700 font-sans">Team Management</span>
+                  </div>
+
+                  {/* Right Action Icons */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setIsDarkMode(!isDarkMode)}
+                      className="w-9 h-9 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center hover:bg-white transition-all border border-white/80 shadow-sm cursor-pointer"
+                      title="Toggle Dark Mode"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Voice Session</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[8px] font-bold uppercase text-[#2563eb] tracking-wide">{voiceActive ? "LISTENING" : "STANDBY"}</span>
-                          <span className={`w-2 h-2 rounded-full ${voiceActive ? "bg-cyan-500 animate-ping" : "bg-slate-300"}`} />
-                        </div>
-                      </div>
-                      
-                      {/* Beautiful Symmetrical Glass Portal Center-stage with Dynamic Audio Waves */}
-                      <div className="flex items-center justify-center py-2 relative h-32 w-full select-none">
-                        
-                        {/* Waveform Bars - Left Side (8 bars) */}
-                        <div className="flex items-center gap-1 absolute left-1.5 justify-end w-[calc(50%-50px)]">
-                          {Array.from({ length: 8 }).map((_, i) => {
-                            const bandIndex = 7 - i;
-                            const heightFactor = micFrequencies[bandIndex] || 0.08;
-                            const baseWeight = (i + 1) / 8; // increases towards center
-                            const finalHeight = Math.max(4, heightFactor * 36 * baseWeight);
-                            return (
-                              <motion.div
-                                key={`wave-l-${i}`}
-                                className="w-1 rounded-full"
-                                style={{
-                                  background: voiceActive 
-                                    ? "linear-gradient(180deg, #22d3ee 0%, #0284c7 100%)" 
-                                    : "rgba(148, 163, 184, 0.25)",
-                                  boxShadow: voiceActive 
-                                    ? "0 0 6px rgba(34, 211, 238, 0.4)" 
-                                    : "none",
-                                  height: `${finalHeight}px`,
-                                }}
-                                animate={voiceActive ? {} : { height: "4px" }}
-                                transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                              />
-                            );
-                          })}
-                        </div>
+                      <Moon className="w-4 h-4 text-slate-700" />
+                    </button>
+                    <button
+                      className="w-9 h-9 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center hover:bg-white transition-all border border-white/80 shadow-sm cursor-pointer"
+                      title="Settings"
+                    >
+                      <Settings className="w-4 h-4 text-slate-700" />
+                    </button>
+                    <button
+                      className="w-9 h-9 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center hover:bg-white transition-all border border-white/80 shadow-sm relative cursor-pointer"
+                      title="Notifications"
+                    >
+                      <Bell className="w-4 h-4 text-slate-700" />
+                      <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[8px] font-extrabold flex items-center justify-center">
+                        3
+                      </span>
+                    </button>
+                    <button
+                      className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center shadow-md border border-white/80 cursor-pointer text-xs font-black"
+                      title="User Profile"
+                    >
+                      US
+                    </button>
+                  </div>
+                </div>
 
-                        {/* Centered Glass Concentric Portal Plate (2x Larger and Interactive!) */}
-                        <motion.button
-                          onClick={toggleVoice}
-                          type="button"
-                          className="relative w-24 h-24 rounded-full flex items-center justify-center z-10 cursor-pointer outline-none border-none select-none overflow-hidden transition-all duration-300"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          {/* Shimmery concentric lines mimicking Fresnel lens/vinyl disk grooves */}
-                          <div 
-                            className="absolute inset-0 rounded-full pointer-events-none transition-all duration-500"
-                            style={{
-                              background: voiceActive 
-                                ? "radial-gradient(circle, #e0f2fe 0%, #38bdf8 35%, #0284c7 70%, #1d4ed8 100%)"
-                                : "radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(224,242,254,0.3) 45%, rgba(186,230,253,0.15) 70%, rgba(255,255,255,0.9) 100%)",
-                              border: voiceActive
-                                ? "2.5px solid rgba(14, 165, 233, 0.85)"
-                                : "1px solid rgba(255,255,255,0.95)",
-                              boxShadow: voiceActive
-                                ? "0 0 25px rgba(14, 165, 233, 0.7), inset 2px 2px 6px rgba(255,255,255,0.7), inset -2px -2px 6px rgba(0,0,0,0.25)"
-                                : "inset 2px 2px 5px rgba(255,255,255,0.9), inset -2px -2px 5px rgba(0,0,0,0.06), 4px 4px 10px rgba(165,185,210,0.25), -4px -4px 10px rgba(255,255,255,0.9)",
-                            }}
-                          />
-                          {/* Ring layers of grooves */}
-                          {Array.from({ length: 5 }).map((_, rIdx) => (
-                            <div 
-                              key={rIdx}
-                              className="absolute rounded-full pointer-events-none"
-                              style={{
-                                width: `${20 + rIdx * 15}px`,
-                                height: `${20 + rIdx * 15}px`,
-                                border: voiceActive 
-                                  ? "1px solid rgba(255, 255, 255, 0.15)"
-                                  : "1px solid rgba(148, 163, 184, 0.1)",
-                              }}
-                            />
-                          ))}
+                {/* GDS & Movement Console placed directly below Dashboard Section Header */}
+                <div style={G.gdsConsoleWrapper}>
+                  <GdsMovementConsole 
+                    activeNode={opsActiveNode} 
+                    darkMode={isDark} 
+                    showNetworkCanvas={showNetworkCanvas}
+                    setShowNetworkCanvas={setShowNetworkCanvas}
+                  />
+                </div>
 
-                          {/* Central Rotating Shine Accent */}
-                          <motion.div 
-                            className="absolute inset-0 rounded-full pointer-events-none bg-gradient-to-tr from-transparent via-white/20 to-transparent"
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                          />
+                {/* CORE DASHBOARD GRID: 3/4 Left Main Columns + 1/4 Right Metrics Column */}
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start"
+                >
+                  
+                  {/* Left Area (3/4 of screen width) */}
+                  <div className="lg:col-span-3 space-y-6">
+                    
+                    {/* Top Row: 3 Floating Neumorphic Glass Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <motion.div variants={itemVariants}>
+                        <VoiceCreationSessionCard 
+                          isListening={voiceActive}
+                          onToggleListening={() => setVoiceActive(!voiceActive)}
+                        />
+                      </motion.div>
+                      <motion.div variants={itemVariants}>
+                        <VoiceCommandQueue />
+                      </motion.div>
+                      <motion.div variants={itemVariants}>
+                        <WorkerSessionsCard />
+                      </motion.div>
+                    </div>
 
-                          {/* Micro-shimmer Dot inside */}
-                          <div className="absolute top-2.5 left-6 w-3 h-1 bg-white/45 rounded-full blur-[1px] transform -rotate-12 pointer-events-none" />
-
-                          {/* Custom Mic Icon 2x Larger! */}
-                          <div className="relative z-20 pointer-events-none">
-                            <CustomMicVoiceIcon 
-                              className={`w-11 h-11 drop-shadow-[0_2px_4px_rgba(0,0,0,0.12)] transition-all duration-300 ${
-                                voiceActive ? "text-white scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.95)]" : "text-slate-400"
-                              }`} 
-                            />
-                          </div>
-                        </motion.button>
-
-                        {/* Waveform Bars - Right Side (8 bars) */}
-                        <div className="flex items-center gap-1 absolute right-1.5 justify-start w-[calc(50%-50px)]">
-                          {Array.from({ length: 8 }).map((_, i) => {
-                            const bandIndex = i;
-                            const heightFactor = micFrequencies[bandIndex] || 0.08;
-                            const baseWeight = (8 - i) / 8; // increases towards center
-                            const finalHeight = Math.max(4, heightFactor * 36 * baseWeight);
-                            return (
-                              <motion.div
-                                key={`wave-r-${i}`}
-                                className="w-1 rounded-full"
-                                style={{
-                                  background: voiceActive 
-                                    ? "linear-gradient(180deg, #22d3ee 0%, #0284c7 100%)" 
-                                    : "rgba(148, 163, 184, 0.25)",
-                                  boxShadow: voiceActive 
-                                    ? "0 0 6px rgba(34, 211, 238, 0.4)" 
-                                    : "none",
-                                  height: `${finalHeight}px`,
-                                }}
-                                animate={voiceActive ? {} : { height: "4px" }}
-                                transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                              />
-                            );
-                          })}
-                        </div>
-
-                      </div>
-
-                      {/* Action buttons side-by-side (Mic Toggle & Lock Safety Switch) matching the uploaded design */}
-                      <div className="grid grid-cols-2 gap-3 mt-3">
-                        
-                        {/* 1. Mic Trigger Button */}
-                        <motion.button
-                          onClick={toggleVoice}
-                          className="py-2.5 px-3 rounded-full flex items-center justify-center gap-2 border font-bold text-xs select-none outline-none transition-all"
-                          style={{
-                            background: voiceActive 
-                              ? "linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)" 
-                              : "rgba(241, 245, 249, 0.85)",
-                            borderColor: voiceActive 
-                              ? "rgba(14, 165, 233, 0.25)" 
-                              : "rgba(203, 213, 225, 0.5)",
-                            color: voiceActive ? "#0369a1" : "#475569",
-                            boxShadow: voiceActive
-                              ? "inset 1.5px 1.5px 3px rgba(255,255,255,0.8), 2px 2px 6px rgba(14, 165, 233, 0.12)"
-                              : "3px 3px 6px rgba(165, 185, 210, 0.25), -2px -2px 6px rgba(255,255,255,0.9)",
-                          }}
-                          whileHover={{ scale: 1.04, boxShadow: "inset 1px 1px 2px rgba(255,255,255,0.8), 2px 2px 4px rgba(165, 185, 210, 0.1)" }}
-                          whileTap={{ scale: 0.96, boxShadow: "inset 2px 2px 5px rgba(165, 185, 210, 0.2), inset -2px -2px 5px rgba(255,255,255,0.9)" }}
-                        >
-                          <Mic className="w-3.5 h-3.5" />
-                          <span>{voiceActive ? "ON" : "MIC"}</span>
-                        </motion.button>
-
-                        {/* 2. Lock Safety Button */}
-                        <motion.button
-                          onClick={() => setVetoActive(prev => !prev)}
-                          className="py-2.5 px-3 rounded-full flex items-center justify-center gap-2 border font-bold text-xs select-none outline-none transition-all"
-                          style={{
-                            background: vetoActive 
-                              ? "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)" 
-                              : "rgba(241, 245, 249, 0.85)",
-                            borderColor: vetoActive 
-                              ? "rgba(239, 68, 68, 0.25)" 
-                              : "rgba(203, 213, 225, 0.5)",
-                            color: vetoActive ? "#b91c1c" : "#475569",
-                            boxShadow: vetoActive
-                              ? "inset 1.5px 1.5px 3px rgba(255,255,255,0.8), 2px 2px 6px rgba(239, 68, 68, 0.12)"
-                              : "3px 3px 6px rgba(165, 185, 210, 0.25), -2px -2px 6px rgba(255,255,255,0.9)",
-                          }}
-                          whileHover={{ scale: 1.04, boxShadow: "inset 1px 1px 2px rgba(255,255,255,0.8), 2px 2px 4px rgba(165, 185, 210, 0.1)" }}
-                          whileTap={{ scale: 0.96, boxShadow: "inset 2px 2px 5px rgba(165, 185, 210, 0.2), inset -2px -2px 5px rgba(255,255,255,0.9)" }}
-                        >
-                          <Lock className="w-3.5 h-3.5" />
-                          <span>{vetoActive ? "VETO" : "LOCK"}</span>
-                        </motion.button>
-
-                      </div>
-
-                      {/* Info limit stats */}
-                      <div className="flex items-center justify-between text-[8px] font-mono font-bold text-slate-400 mt-2.5 px-1">
-                        <span>{voiceActive ? "AUDIO STREAM CAPTURE ACTIVE" : "MICROPHONE STANDBY"}</span>
-                        <span>02:00:00 max</span>
-                      </div>
-                    </motion.div>
-
-                    {/* Card 2: Voice Interaction Metrics (Distinct Glassmorphic Card!) */}
-                    <motion.div variants={itemVariants}>
-                      <VoiceMetricsCard />
-                    </motion.div>
-
-                    {/* Card 3: Voice Command Queue (Distinct, uncluttered card!) */}
-                    <motion.div variants={itemVariants}>
-                      <VoiceCommandQueue />
-                    </motion.div>
-
-                    {/* Card 4: Worker Sessions Card (Interactive company workers sessions) */}
-                    <motion.div variants={itemVariants}>
-                      <WorkerSessionsCard />
+                    {/* Creation Milestones Timeline (Spanning Left 3 Columns) */}
+                    <motion.div variants={itemVariants} className="w-full">
+                      <MilestonesTimeline 
+                        isListening={voiceActive}
+                        onToggleListening={() => setVoiceActive(!voiceActive)}
+                      />
                     </motion.div>
 
                   </div>
 
-                  {/* Weekly Timeline & Floating Transparent Pill */}
-                  <motion.div variants={itemVariants} className="w-full">
-                    <MilestonesTimeline />
-                  </motion.div>
+                  {/* Right Column (1/4 of screen width) */}
+                  <div className="lg:col-span-1 space-y-6">
+                    <motion.div variants={itemVariants}>
+                      <VoiceMetricsCard />
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                      <SalesforceObjectsCard />
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                      <SyncAlertsCard />
+                    </motion.div>
+                  </div>
 
-                </div>
-
-                {/* Right Column (1/4 of screen width) */}
-                <div className="lg:col-span-1 space-y-6">
-                  
-                  {/* Top Round Glass Buttons Bar */}
-                  <motion.div variants={itemVariants} className="flex justify-end gap-2.5">
-                    {["Search", "Settings", "Profile", "Notifications"].map((btnLabel, i) => (
-                      <button
-                        key={i}
-                        title={btnLabel}
-                        className="w-9 h-9 rounded-full bg-white/50 backdrop-blur-md flex items-center justify-center hover:bg-white/80 transition-all border border-white/80 relative"
-                        style={{
-                          boxShadow: "3px 3px 8px rgba(165, 185, 210, 0.2), -3px -3px 8px rgba(255,255,255,0.9)",
-                        }}
-                      >
-                        {i === 0 && <Search className="w-4 h-4 text-[#1e3a8a]" />}
-                        {i === 1 && <Settings className="w-4 h-4 text-[#1e3a8a]" />}
-                        {i === 2 && <Users className="w-4 h-4 text-[#1e3a8a]" />}
-                        {i === 3 && (
-                          <>
-                            <Bell className="w-4 h-4 text-[#1e3a8a]" />
-                            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[8px] font-bold flex items-center justify-center">
-                              3
-                            </span>
-                          </>
-                        )}
-                      </button>
-                    ))}
-                  </motion.div>
-
-                  {/* Live Recent Activity */}
-                  <motion.div variants={itemVariants}>
-                    <RecentActivityLive />
-                  </motion.div>
-
-                  {/* Salesforce Objects Used */}
-                  <motion.div variants={itemVariants}>
-                    <SalesforceObjectsCard />
-                  </motion.div>
-
-                  {/* Data Sync Alerts */}
-                  <motion.div variants={itemVariants}>
-                    <SyncAlertsCard />
-                  </motion.div>
-
-                </div>
-
-              </motion.div>
+                </motion.div>
 
               {/* HIDDEN PREVIOUS OPERATIONAL VIEWS CONTAINER */}
               <div className="hidden">
@@ -3027,7 +3181,7 @@ export default function App() {
                 </div>
                 <div className="mt-1">
                   <p className="text-xl font-black tracking-tight" style={{ color: "#1e3a8a" }}>99.9% Up</p>
-                  <p className="text-[10px] font-bold uppercase tracking-wider mt-0.5" style={{ color: isDark ? "#475569" : "#7a9a8d" }}>Live Network</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider mt-0.5" style={{ color: isDark ? "#475569" : "#514F4D" }}>Live Network</p>
                 </div>
                 <div className="mt-3 flex items-center justify-between text-[10px] border-t border-slate-100/80 pt-2 font-mono" style={{ color: isDark ? "#64748b" : "#475569" }}>
                   <span>Latency: <strong className="text-[#1e3a8a]">12ms</strong></span>
@@ -3082,151 +3236,6 @@ export default function App() {
               </motion.div>
 
             </motion.div>
-            </div>
-
-            {/* Secondary row for the requested original cards info shifted below */}
-            <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-              style={G.analyticsGrid}
-              initial={{ opacity: 0, y: 12 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              transition={{ delay: 0.22 }}
-            >
-              
-              {/* Secondary Info: Total Revenue */}
-              <motion.div 
-                className="rounded-2xl flex flex-col justify-between border-shimmer p-5"
-                style={{ ...G.card, ...G.analyticsCard }}
-                whileHover={{ scale: 1.02, boxShadow: "0 10px 30px rgba(37, 99, 235, 0.2)" }}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl" style={G.inset}>
-                      <DollarSign className="w-4.5 h-4.5 text-[#2563eb]" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-normal uppercase tracking-wider font-light" style={{ color: isDark ? "#5b7290" : "#5b7290", fontFamily: "'Segoe UI', -apple-system, sans-serif", fontWeight: 300 }}>Total Revenue</p>
-                      <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
-                        transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
-                        className="text-2xl font-bold tracking-tight" 
-                        style={{ color: isDark ? "#0f172a" : "#0f172a", fontFamily: "'Segoe UI', -apple-system, sans-serif" }}
-                      >
-                        $54,239
-                      </motion.p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold flex items-center gap-0.5 text-[#2563eb] bg-[#2563eb]/10 px-1.5 py-0.5 rounded-lg border border-[#2563eb]/20 font-sans">
-                    <ArrowUpRight className="w-3 h-3" />
-                    +12.5%
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* Secondary Info: Total Users (Salesforce Metrics: Objects & Classes) */}
-              <motion.div 
-                className="rounded-2xl flex flex-col justify-between border-shimmer p-5"
-                style={{ ...G.card, ...G.analyticsCard }}
-                whileHover={{ scale: 1.02, boxShadow: "0 10px 30px rgba(37, 99, 235, 0.2)" }}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl" style={G.inset}>
-                      <Users className="w-4.5 h-4.5 text-[#2563eb]" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-normal uppercase tracking-wider font-light" style={{ color: isDark ? "#5b7290" : "#5b7290", fontFamily: "'Segoe UI', -apple-system, sans-serif", fontWeight: 300 }}>Total Users</p>
-                      <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
-                        transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
-                        className="text-2xl font-bold tracking-tight" 
-                        style={{ color: isDark ? "#0f172a" : "#0f172a", fontFamily: "'Segoe UI', -apple-system, sans-serif" }}
-                      >
-                        8,235
-                      </motion.p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold flex items-center gap-0.5 text-[#2563eb] bg-[#2563eb]/10 px-1.5 py-0.5 rounded-lg border border-[#2563eb]/20 font-sans">
-                    <ArrowUpRight className="w-3 h-3" />
-                    +8.2%
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* Secondary Info: Total Orders */}
-              <motion.div 
-                className="rounded-2xl flex flex-col justify-between border-shimmer p-5"
-                style={{ ...G.card, ...G.analyticsCard }}
-                whileHover={{ scale: 1.02, boxShadow: "0 10px 30px rgba(37, 99, 235, 0.2)" }}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl" style={G.inset}>
-                      <ShoppingCart className="w-4.5 h-4.5 text-[#2563eb]" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-normal uppercase tracking-wider font-light" style={{ color: isDark ? "#5b7290" : "#5b7290", fontFamily: "'Segoe UI', -apple-system, sans-serif", fontWeight: 300 }}>Total Orders</p>
-                      <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
-                        transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
-                        className="text-2xl font-bold tracking-tight" 
-                        style={{ color: isDark ? "#0f172a" : "#0f172a", fontFamily: "'Segoe UI', -apple-system, sans-serif" }}
-                      >
-                        1,423
-                      </motion.p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold flex items-center gap-0.5 text-rose-500 bg-rose-50/60 px-1.5 py-0.5 rounded-lg border border-rose-500/10 font-sans">
-                    <ArrowDownRight className="w-3 h-3" />
-                    -3.1%
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* Secondary Info: Growth Velocity */}
-              <motion.div 
-                className="rounded-2xl flex flex-col justify-between border-shimmer p-5"
-                style={{ ...G.card, ...G.analyticsCard }}
-                whileHover={{ scale: 1.02, boxShadow: "0 10px 30px rgba(37, 99, 235, 0.2)" }}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl" style={G.inset}>
-                      <TrendingUp className="w-4.5 h-4.5 text-[#2563eb]" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-normal uppercase tracking-wider font-light" style={{ color: isDark ? "#5b7290" : "#5b7290", fontFamily: "'Segoe UI', -apple-system, sans-serif", fontWeight: 300 }}>Growth Velocity</p>
-                      <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0.45, 0.95, 0.65, 1] }}
-                        transition={{ duration: 0.7, ease: "easeInOut", times: [0, 0.15, 0.3, 0.45, 0.7, 1] }}
-                        className="text-2xl font-bold tracking-tight" 
-                        style={{ color: isDark ? "#0f172a" : "#0f172a", fontFamily: "'Segoe UI', -apple-system, sans-serif" }}
-                      >
-                        23.5%
-                      </motion.p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold flex items-center gap-0.5 text-[#2563eb] bg-[#2563eb]/10 px-1.5 py-0.5 rounded-lg border border-[#2563eb]/20 font-sans">
-                    <ArrowUpRight className="w-3 h-3" />
-                    +4.3%
-                  </span>
-                </div>
-              </motion.div>
-
-            </motion.div>
-
-            {/* GDS & Movement Console with clean spacing wrapper */}
-            <div style={G.gdsConsoleWrapper}>
-              <GdsMovementConsole 
-                activeNode={opsActiveNode} 
-                darkMode={isDark} 
-                showNetworkCanvas={showNetworkCanvas}
-                setShowNetworkCanvas={setShowNetworkCanvas}
-              />
             </div>
 
             {/* Tableau Network */}
@@ -3383,7 +3392,7 @@ export default function App() {
                       className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-semibold"
                       style={{
                         ...G.card,
-                        color: vetoActive ? "#ef4444" : "#7a9a8d",
+                        color: vetoActive ? "#BA0517" : "#514F4D",
                         border: vetoActive ? "1px solid rgba(239,68,68,0.20)" : G.card.border,
                       }}
                       whileHover={{ scale: 1.04 }}
@@ -3414,222 +3423,13 @@ export default function App() {
               )}
             </AnimatePresence>
 
-            {/* Tableau, Maven & Salesforce LWC Suite */}
-            <TableauLwcMigrator darkMode={isDark} />
-
-            {/* Analytics Grid */}
-            <div className="mb-4">
-              <div className="flex items-center gap-3 mb-3 flex-wrap sm:flex-nowrap">
-                <Layers className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#2563eb" }} />
-                <span className="text-[11px] font-semibold uppercase tracking-widest mr-2" style={{ color: "#1e3a8a" }}>
-                  Analytics — click any card para expandir · di el nombre por voz
-                </span>
-                <motion.button
-                  onClick={() => setExpandAllCards(p => !p)}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-xl flex-shrink-0 font-bold border transition-all duration-200"
-                  style={{
-                    ...G.card,
-                    background: expandAllCards ? "rgba(37, 99, 235, 0.12)" : G.card.background,
-                    borderColor: expandAllCards ? "rgba(37, 99, 235, 0.45)" : "rgba(37, 99, 235, 0.15)",
-                  }}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                >
-                  <span className="text-[9px] uppercase tracking-wider font-extrabold" style={{ color: "#1e3a8a" }}>
-                    {expandAllCards ? "▲ Colapsar Todo" : "▼ Expandir todo"}
-                  </span>
-                </motion.button>
-                <div className="h-px flex-1 min-w-[20px]"
-                  style={{ background: "linear-gradient(to right,rgba(37,99,235,0.14),transparent)" }} />
-              </div>
-              {expandAllCards ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {ANALYTICS_CARDS.map((card, i) => (
-                    <motion.div key={card.id}
-                      className="p-5 rounded-3xl"
-                      style={{
-                        ...G.cardDeep,
-                        border: `1.5px solid ${card.color}25`,
-                      }}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.04 }}
-                    >
-                      <div className="flex items-center justify-between pb-3 mb-4"
-                        style={{ borderBottom: "1px solid rgba(37,99,235,0.08)" }}>
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <div className="w-1.5 h-4 rounded-full" style={{ background: card.color }} />
-                            <h3 className="text-base font-bold" style={{ color: "#0d1f1a" }}>{card.title}</h3>
-                          </div>
-                          <p className="text-xs text-slate-500">{card.subtitle}</p>
-                        </div>
-                        <span className="text-xs font-bold px-2.5 py-1 rounded-full font-sans"
-                          style={{ background: `${card.color}10`, color: card.color }}>
-                          {card.metric}
-                        </span>
-                      </div>
-                      <div className="p-1">{EXPANDED_COMPONENTS[card.id]}</div>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {ANALYTICS_CARDS.map((card, i) => (
-                    <motion.div key={card.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.35 + i * 0.04 }}
-                    >
-                      <CompactCard
-                        card={card}
-                        onExpand={() => setExpandedCard(card.id)}
-                        voiceHighlight={voiceHighlight === card.id}
-                        darkMode={isDark}
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Tri-Gateway Hub */}
-            <ApiGatewayPorts tick={gatewayTick} darkMode={isDark} />
             </div>
 
             )}
 
           </div>
 
-          {/* Bottom Control Bar / Refactored Menu */}
-          <div className="w-full border-t border-blue-100/30 bg-white/40 backdrop-blur-md px-6 py-4 flex items-center justify-center relative z-20 mt-auto shadow-[0_-4px_16px_rgba(150,175,205,0.06)]">
-            <div className="flex items-center gap-4 flex-wrap">
-              {/* ADMIN recuadro */}
-              <div ref={orgDropdownRef} className="relative">
-                <motion.button
-                  onClick={() => setOrgDropdownOpen(p => !p)}
-                  className="flex items-center gap-2.5 p-2 pr-3 rounded-2xl"
-                  style={G.card}
-                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                >
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1e40af]
-                    flex items-center justify-center text-white text-sm font-bold flex-shrink-0">A</div>
-                  <div className="flex flex-col items-start leading-none gap-0.5">
-                    <span className="text-sm font-semibold" style={{ color: "#1e3a8a" }}>Admin</span>
-                    <span className="text-[9px] flex items-center gap-1" style={{ color: "#475569" }}>
-                      <Building2 style={{ width: 9, height: 9 }} />
-                      <span>Organización de mi departamento</span>
-                      <span style={{ color: "#2563eb", fontWeight: 700 }}>· {currentDept}</span>
-                    </span>
-                  </div>
-                  <motion.div animate={{ rotate: orgDropdownOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                    <ChevronDown className="w-3.5 h-3.5" style={{ color: "#1e3a8a" }} />
-                  </motion.div>
-                </motion.button>
 
-                <AnimatePresence>
-                  {orgDropdownOpen && (
-                    <motion.div
-                      className="absolute left-0 bottom-full mb-2.5 w-56 rounded-2xl z-50 overflow-hidden"
-                      style={G.cardDeep}
-                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                      transition={{ duration: 0.18 }}
-                    >
-                      <div className="px-4 py-3"
-                        style={{ borderBottom: "1px solid rgba(37,99,235,0.08)" }}>
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2563eb] to-[#1e40af]
-                            flex items-center justify-center text-white text-sm font-bold flex-shrink-0">A</div>
-                          <div>
-                            <p className="text-sm font-semibold" style={{ color: "#1e3a8a" }}>Admin User</p>
-                            <p className="text-xs" style={{ color: "#475569" }}>admin@arlo.io</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-2">
-                        <p className="text-[9px] uppercase tracking-widest px-2 py-1"
-                          style={{ color: "#475569" }}>
-                          Organización / Departamento
-                        </p>
-                        {ORG_DEPTS.map(dept => (
-                          <button key={dept}
-                            onClick={() => { setCurrentDept(dept); setOrgDropdownOpen(false); }}
-                            className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-sm"
-                            style={{
-                              color: currentDept === dept ? "#1e3a8a" : "#475569",
-                              fontWeight: currentDept === dept ? 600 : 400,
-                              transition: "background 0.1s",
-                            }}
-                            onMouseEnter={e => (e.currentTarget.style.background = "rgba(37,99,235,0.06)")}
-                            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-                          >
-                            {dept}
-                            {currentDept === dept && <Check className="w-3 h-3" style={{ color: "#1e3a8a" }} />}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="p-2 pt-0">
-                        <motion.button
-                          onClick={() => { setShareOpen(true); setOrgDropdownOpen(false); }}
-                          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white"
-                          style={{ background: "linear-gradient(135deg,#1e3a8a,#3b82f6)" }}
-                          whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                        >
-                          <Share2 className="w-3.5 h-3.5" /> Compartir Vista
-                        </motion.button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Icon 3: Operaciones (Expandable) */}
-              <div className="relative">
-                <motion.button
-                  onClick={() => {
-                    setActiveAppMode('operational');
-                    setIsOpsOpen(prev => !prev);
-                    setIsArchOpen(false);
-                  }}
-                  className="flex items-center gap-2.5 p-2 rounded-full relative overflow-hidden h-[48px]"
-                  style={{
-                    ...G.card,
-                    background: activeAppMode === 'operational' ? "rgba(6, 182, 212, 0.12)" : G.card.background,
-                    border: activeAppMode === 'operational' ? "1.5px solid #22d3ee" : "1px solid rgba(6, 182, 212, 0.15)",
-                    boxShadow: activeAppMode === 'operational' ? "3px 3px 8px rgba(34, 211, 238, 0.3), -2px -2px 6px rgba(255,255,255,0.9)" : "3px 3px 6px rgba(165, 185, 210, 0.2), -2px -2px 6px rgba(255,255,255,0.9)",
-                  }}
-                  animate={{ width: isOpsOpen ? "auto" : "48px" }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  title="Operaciones (Light)"
-                >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white flex-shrink-0 shadow-[0_2px_8px_rgba(6,182,212,0.3)]">
-                    <Activity className="w-4 h-4 text-white" />
-                  </div>
-                  <AnimatePresence initial={false}>
-                    {isOpsOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        className="flex items-center gap-2 whitespace-nowrap overflow-hidden pr-2"
-                      >
-                        <span className="text-xs font-extrabold text-cyan-600 dark:text-cyan-400 font-mono">
-                          OPERACIONES
-                        </span>
-                        <span className="text-[7.5px] font-black uppercase tracking-widest text-cyan-500 bg-cyan-100/60 dark:bg-cyan-950/40 px-1.5 py-0.5 rounded border border-cyan-500/10">
-                          LIGHT
-                        </span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.button>
-              </div>
-            </div>
-          </div>
 
           {/* Node context menu */}
           <AnimatePresence>
@@ -3651,7 +3451,7 @@ export default function App() {
               return (
                 <motion.div key="card-modal"
                   className="fixed inset-0 z-[150] flex items-center justify-center p-4"
-                  style={{ backdropFilter: "blur(16px)", background: "rgba(178,196,189,0.55)" }}
+                  style={{ backdropFilter: "blur(16px)", background: "rgba(8, 38, 54, 0.45)" }}
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   onClick={() => setExpandedCard(null)}
                 >
@@ -3664,18 +3464,18 @@ export default function App() {
                     onClick={e => e.stopPropagation()}
                   >
                     <div className="flex items-center justify-between px-6 pt-5 pb-3"
-                      style={{ borderBottom: "1px solid rgba(16,185,129,0.08)" }}>
+                      style={{ borderBottom: "1px solid #DDDBDA" }}>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <div className="w-1.5 h-4 rounded-full" style={{ background: card.color }} />
-                          <h3 className="text-lg font-bold" style={{ color: "#0d1f1a" }}>{card.title}</h3>
+                          <h3 className="text-lg font-bold" style={{ color: "#080707" }}>{card.title}</h3>
                         </div>
-                        <p className="text-sm" style={{ color: "#7a9a8d" }}>{card.subtitle}</p>
+                        <p className="text-sm" style={{ color: "#514F4D" }}>{card.subtitle}</p>
                       </div>
                       <motion.button onClick={() => setExpandedCard(null)}
                         className="p-2 rounded-xl" style={G.card}
                         whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                        <X className="w-4 h-4" style={{ color: "#4a7268" }} />
+                        <X className="w-4 h-4" style={{ color: "#0176D3" }} />
                       </motion.button>
                     </div>
                     <div className="p-6">{EXPANDED_COMPONENTS[expandedCard]}</div>
@@ -3694,7 +3494,7 @@ export default function App() {
               return (
                 <motion.div key="kpi-modal"
                   className="fixed inset-0 z-[160] flex items-center justify-center p-4"
-                  style={{ backdropFilter: "blur(18px)", background: "rgba(178,196,189,0.55)" }}
+                  style={{ backdropFilter: "blur(18px)", background: "rgba(8, 38, 54, 0.45)" }}
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   onClick={() => setExpandedKpi(null)}
                 >
@@ -3712,8 +3512,8 @@ export default function App() {
                             style={{ background: node.color, boxShadow: `0 0 8px ${node.color}` }} />
                         </div>
                         <div>
-                          <p className="text-lg font-extrabold" style={{ color: "#0d1f1a" }}>{node.name}</p>
-                          <p className="text-[11px]" style={{ color: "#7a9a8d" }}>
+                          <p className="text-lg font-extrabold" style={{ color: "#080707" }}>{node.name}</p>
+                          <p className="text-[11px]" style={{ color: "#514F4D" }}>
                             {node.metric} · {node.confidence}% conf.
                           </p>
                         </div>
@@ -3721,7 +3521,7 @@ export default function App() {
                       <motion.button onClick={() => setExpandedKpi(null)}
                         className="p-2 rounded-xl" style={G.card}
                         whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                        <X className="w-4 h-4" style={{ color: "#4a7268" }} />
+                        <X className="w-4 h-4" style={{ color: "#0176D3" }} />
                       </motion.button>
                     </div>
                     <div className="grid grid-cols-2 gap-3 mb-4">
@@ -3730,18 +3530,18 @@ export default function App() {
                           initial={{ opacity: 0, y: 6 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: i * 0.07 }}>
-                          <p className="text-[10px] mb-1 font-mono" style={{ color: "#7a9a8d" }}>{kpi.label}</p>
+                          <p className="text-[10px] mb-1 font-mono" style={{ color: "#514F4D" }}>{kpi.label}</p>
                           <p className="text-xl font-extrabold font-mono" style={{ color: node.color }}>{kpi.value}</p>
                         </motion.div>
                       ))}
                     </div>
                     <div className="mb-4">
                       <div className="flex justify-between mb-1.5">
-                        <span className="text-[10px]" style={{ color: "#7a9a8d" }}>Confidence</span>
+                        <span className="text-[10px]" style={{ color: "#514F4D" }}>Confidence</span>
                         <span className="text-[10px] font-bold" style={{ color: node.color }}>{node.confidence}%</span>
                       </div>
                       <div className="h-1.5 rounded-full overflow-hidden"
-                        style={{ background: "rgba(16,185,129,0.08)" }}>
+                        style={{ background: "rgba(1, 118, 211, 0.12)" }}>
                         <motion.div className="h-full rounded-full"
                           style={{ background: `linear-gradient(90deg,${node.color},${node.color}77)` }}
                           initial={{ width: 0 }}
@@ -3751,8 +3551,8 @@ export default function App() {
                     </div>
                     <div className="p-3 rounded-xl" style={G.inset}>
                       <p className="text-[9px] uppercase tracking-widest mb-1.5 font-mono"
-                        style={{ color: "#7a9a8d" }}>Fórmula</p>
-                      <code className="text-xs font-mono" style={{ color: "#059669" }}>{data.formula}</code>
+                        style={{ color: "#514F4D" }}>Fórmula</p>
+                      <code className="text-xs font-mono text-[#0176D3]">{data.formula}</code>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -3765,7 +3565,7 @@ export default function App() {
             {vetoActive && (
               <motion.div
                 className="fixed inset-0 z-[200] flex items-center justify-center"
-                style={{ backdropFilter: "blur(18px)", background: "rgba(178,196,189,0.70)" }}
+                style={{ backdropFilter: "blur(18px)", background: "rgba(8, 38, 54, 0.55)" }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               >
                 <motion.div className="p-8 rounded-3xl text-center max-w-sm mx-6"
@@ -3782,12 +3582,12 @@ export default function App() {
                     style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.14)" }}>
                     <AlertTriangle className="w-7 h-7 text-[#ef4444]" />
                   </div>
-                  <h2 className="text-lg font-extrabold mb-2" style={{ color: "#0d1f1a" }}>Safety Veto Active</h2>
-                  <p className="text-sm mb-4" style={{ color: "#7a9a8d" }}>NLP confidence below threshold.</p>
+                  <h2 className="text-lg font-extrabold mb-2" style={{ color: "#080707" }}>Safety Veto Active</h2>
+                  <p className="text-sm mb-4" style={{ color: "#514F4D" }}>NLP confidence below threshold.</p>
                   <button
                     onClick={() => setVetoActive(false)}
                     className="px-6 py-2.5 rounded-xl font-semibold text-sm text-white"
-                    style={{ background: "linear-gradient(135deg,#10b981,#059669)" }}>
+                    style={{ background: "linear-gradient(135deg,#0176D3,#032D60)" }}>
                     Override &amp; Continue
                   </button>
                 </motion.div>
@@ -3797,6 +3597,213 @@ export default function App() {
 
           {/* Share Modal popup */}
           <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} />
+
+          {/* Voice Session Portal Modal (Triggered by Avatar Icon in Sidebar) */}
+          <AnimatePresence>
+            {showVoicePortal && (
+              <motion.div
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/35 backdrop-blur-md"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowVoicePortal(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.88, opacity: 0, y: 20 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.88, opacity: 0, y: 20 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  className="p-6 rounded-3xl flex flex-col justify-between w-full max-w-sm min-h-[300px] relative overflow-hidden"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.9)",
+                    backdropFilter: "blur(32px)",
+                    WebkitBackdropFilter: "blur(32px)",
+                    border: "1px solid rgba(255, 255, 255, 0.95)",
+                    boxShadow: "0 25px 60px rgba(15, 23, 42, 0.25), 0 0 30px rgba(255, 255, 255, 0.9)",
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Voice Session</span>
+                      <div className="flex items-center gap-1.5 ml-1">
+                        <span className="text-[8px] font-bold uppercase text-[#2563eb] tracking-wide">{voiceActive ? "LISTENING" : "STANDBY"}</span>
+                        <span className={`w-2 h-2 rounded-full ${voiceActive ? "bg-cyan-500 animate-ping" : "bg-slate-300"}`} />
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowVoicePortal(false)}
+                      className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer border-none outline-none"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Symmetrical Glass Portal Center-stage with Dynamic Audio Waves */}
+                  <div className="flex items-center justify-center py-2 relative h-32 w-full select-none">
+                    {/* Waveform Bars - Left Side (8 bars) */}
+                    <div className="flex items-center gap-1 absolute left-1.5 justify-end w-[calc(50%-50px)]">
+                      {Array.from({ length: 8 }).map((_, i) => {
+                        const bandIndex = 7 - i;
+                        const heightFactor = micFrequencies[bandIndex] || 0.08;
+                        const baseWeight = (i + 1) / 8;
+                        const finalHeight = Math.max(4, heightFactor * 36 * baseWeight);
+                        return (
+                          <motion.div
+                            key={`wave-l-${i}`}
+                            className="w-1 rounded-full"
+                            style={{
+                              background: voiceActive 
+                                ? "linear-gradient(180deg, #22d3ee 0%, #0284c7 100%)" 
+                                : "rgba(148, 163, 184, 0.25)",
+                              boxShadow: voiceActive 
+                                ? "0 0 6px rgba(34, 211, 238, 0.4)" 
+                                : "none",
+                              height: `${finalHeight}px`,
+                            }}
+                            animate={voiceActive ? {} : { height: "4px" }}
+                            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* Centered Glass Concentric Portal Plate */}
+                    <motion.button
+                      onClick={toggleVoice}
+                      type="button"
+                      className="relative w-24 h-24 rounded-full flex items-center justify-center z-10 cursor-pointer outline-none border-none select-none overflow-hidden transition-all duration-300"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <div 
+                        className="absolute inset-0 rounded-full pointer-events-none transition-all duration-500"
+                        style={{
+                          background: voiceActive 
+                            ? "radial-gradient(circle, #e0f2fe 0%, #38bdf8 35%, #0284c7 70%, #1d4ed8 100%)"
+                            : "radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(224,242,254,0.3) 45%, rgba(186,230,253,0.15) 70%, rgba(255,255,255,0.9) 100%)",
+                          border: voiceActive
+                            ? "2.5px solid rgba(14, 165, 233, 0.85)"
+                            : "1px solid rgba(255,255,255,0.95)",
+                          boxShadow: voiceActive
+                            ? "0 0 25px rgba(14, 165, 233, 0.7), inset 2px 2px 6px rgba(255,255,255,0.7), inset -2px -2px 6px rgba(0,0,0,0.25)"
+                            : "inset 2px 2px 5px rgba(255,255,255,0.9), inset -2px -2px 5px rgba(0,0,0,0.06), 4px 4px 10px rgba(165,185,210,0.25), -4px -4px 10px rgba(255,255,255,0.9)",
+                        }}
+                      />
+                      {Array.from({ length: 5 }).map((_, rIdx) => (
+                        <div 
+                          key={rIdx}
+                          className="absolute rounded-full pointer-events-none"
+                          style={{
+                            width: `${20 + rIdx * 15}px`,
+                            height: `${20 + rIdx * 15}px`,
+                            border: voiceActive 
+                              ? "1px solid rgba(255, 255, 255, 0.15)"
+                              : "1px solid rgba(148, 163, 184, 0.1)",
+                          }}
+                        />
+                      ))}
+
+                      <motion.div 
+                        className="absolute inset-0 rounded-full pointer-events-none bg-gradient-to-tr from-transparent via-white/20 to-transparent"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                      />
+
+                      <div className="absolute top-2.5 left-6 w-3 h-1 bg-white/45 rounded-full blur-[1px] transform -rotate-12 pointer-events-none" />
+
+                      <div className="relative z-20 pointer-events-none">
+                        <CustomMicVoiceIcon 
+                          className={`w-11 h-11 drop-shadow-[0_2px_4px_rgba(0,0,0,0.12)] transition-all duration-300 ${
+                            voiceActive ? "text-white scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.95)]" : "text-slate-400"
+                          }`} 
+                        />
+                      </div>
+                    </motion.button>
+
+                    {/* Waveform Bars - Right Side (8 bars) */}
+                    <div className="flex items-center gap-1 absolute right-1.5 justify-start w-[calc(50%-50px)]">
+                      {Array.from({ length: 8 }).map((_, i) => {
+                        const bandIndex = i;
+                        const heightFactor = micFrequencies[bandIndex] || 0.08;
+                        const baseWeight = (8 - i) / 8;
+                        const finalHeight = Math.max(4, heightFactor * 36 * baseWeight);
+                        return (
+                          <motion.div
+                            key={`wave-r-${i}`}
+                            className="w-1 rounded-full"
+                            style={{
+                              background: voiceActive 
+                                ? "linear-gradient(180deg, #22d3ee 0%, #0284c7 100%)" 
+                                : "rgba(148, 163, 184, 0.25)",
+                              boxShadow: voiceActive 
+                                ? "0 0 6px rgba(34, 211, 238, 0.4)" 
+                                : "none",
+                              height: `${finalHeight}px`,
+                            }}
+                            animate={voiceActive ? {} : { height: "4px" }}
+                            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Action buttons side-by-side */}
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <motion.button
+                      onClick={toggleVoice}
+                      className="py-2.5 px-3 rounded-full flex items-center justify-center gap-2 border font-bold text-xs select-none outline-none transition-all cursor-pointer"
+                      style={{
+                        background: voiceActive 
+                          ? "linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)" 
+                          : "rgba(241, 245, 249, 0.85)",
+                        borderColor: voiceActive 
+                          ? "rgba(14, 165, 233, 0.25)" 
+                          : "rgba(203, 213, 225, 0.5)",
+                        color: voiceActive ? "#0369a1" : "#475569",
+                        boxShadow: voiceActive
+                          ? "inset 1.5px 1.5px 3px rgba(255,255,255,0.8), 2px 2px 6px rgba(14, 165, 233, 0.12)"
+                          : "3px 3px 6px rgba(165, 185, 210, 0.25), -2px -2px 6px rgba(255,255,255,0.9)",
+                      }}
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.96 }}
+                    >
+                      <Mic className="w-3.5 h-3.5" />
+                      <span>{voiceActive ? "ON" : "MIC"}</span>
+                    </motion.button>
+
+                    <motion.button
+                      onClick={() => setVetoActive(prev => !prev)}
+                      className="py-2.5 px-3 rounded-full flex items-center justify-center gap-2 border font-bold text-xs select-none outline-none transition-all cursor-pointer"
+                      style={{
+                        background: vetoActive 
+                          ? "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)" 
+                          : "rgba(241, 245, 249, 0.85)",
+                        borderColor: vetoActive 
+                          ? "rgba(239, 68, 68, 0.25)" 
+                          : "rgba(203, 213, 225, 0.5)",
+                        color: vetoActive ? "#b91c1c" : "#475569",
+                        boxShadow: vetoActive
+                          ? "inset 1.5px 1.5px 3px rgba(255,255,255,0.8), 2px 2px 6px rgba(239, 68, 68, 0.12)"
+                          : "3px 3px 6px rgba(165, 185, 210, 0.25), -2px -2px 6px rgba(255,255,255,0.9)",
+                      }}
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.96 }}
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>{vetoActive ? "VETO" : "LOCK"}</span>
+                    </motion.button>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[8px] font-mono font-bold text-slate-400 mt-2.5 px-1">
+                    <span>{voiceActive ? "AUDIO STREAM CAPTURE ACTIVE" : "MICROPHONE STANDBY"}</span>
+                    <span>02:00:00 max</span>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           </div>
         </motion.div>
       )}

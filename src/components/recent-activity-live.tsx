@@ -59,28 +59,24 @@ export function RecentActivityLive() {
 
   return (
     <div
-      className="p-3.5 rounded-2xl flex flex-col justify-between min-h-[210px] h-full relative overflow-hidden glass-neo-card"
+      className="p-5 rounded-3xl flex flex-col justify-between min-h-[210px] h-full relative overflow-hidden glass-neo-card"
     >
       {/* Header section with Recent Activity title */}
-      <div className="flex items-center justify-between mb-1.5">
-        <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-3 bg-[#0ea5e9] rounded-full" />
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 font-display">
-            Recent Activity
-          </span>
-        </div>
-        <span className="text-[8px] font-black uppercase font-mono tracking-widest text-[#2563eb] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 shadow-sm flex items-center gap-1">
-          <Sparkles className="w-2.5 h-2.5 text-[#2563eb] animate-pulse" />
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-sans flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-[#2563eb] animate-pulse" /> Recent Activity
+        </span>
+        <span className="text-[8px] font-bold uppercase text-[#2563eb] tracking-wide bg-blue-100/60 px-2 py-0.5 rounded-full">
           LIVE UPDATING
         </span>
       </div>
 
-      {/* Inner card representing the visual frame from the screenshot */}
+      {/* Inner card representing the visual frame */}
       <div 
-        className="flex-1 p-2 rounded-xl flex flex-col justify-between"
+        className="flex-1 p-2.5 rounded-2xl flex flex-col justify-between border border-white/80"
         style={{
-          background: "rgba(240, 245, 242, 0.5)",
-          border: "1px solid rgba(255, 255, 255, 0.6)",
+          background: "rgba(243, 247, 252, 0.85)",
+          boxShadow: "inset 2px 2px 5px rgba(165, 185, 210, 0.18), inset -2px -2px 5px rgba(255, 255, 255, 0.8)",
         }}
       >
         <div className="flex items-center justify-between mb-2.5">

@@ -33,7 +33,7 @@ export function StatsCard({ title, value, change, icon, trend }: StatsCardProps)
           transition={{ duration: 0.5 }}
         >
           <motion.div
-            className="text-[#4a7268]"
+            className="text-[#0176D3]"
             animate={{ scale: isHovered ? 1.1 : 1 }}
             transition={{ duration: 0.3 }}
           >
@@ -43,8 +43,8 @@ export function StatsCard({ title, value, change, icon, trend }: StatsCardProps)
         <motion.span
           className={`px-3 py-1 rounded-full text-sm glass-neo-inset ${
             trend === "up"
-              ? "text-[#009970]"
-              : "text-[#ef4444]"
+              ? "text-[#2E844A]"
+              : "text-[#BA0517]"
           }`}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -54,16 +54,16 @@ export function StatsCard({ title, value, change, icon, trend }: StatsCardProps)
         </motion.span>
       </div>
       <motion.p
-        className="text-[#7a9a8d] mb-1 text-sm font-semibold"
+        className="text-[#514F4D] mb-1 text-sm font-semibold"
         animate={{ opacity: isHovered ? 0.7 : 1 }}
       >
         {title}
       </motion.p>
       <motion.p
-        className="text-[#1d3a2f] text-2xl font-bold"
+        className="text-[#080707] text-2xl font-bold"
         animate={{
           scale: isHovered ? 1.05 : 1,
-          color: isHovered ? "#009970" : "#1d3a2f"
+          color: isHovered ? "#0176D3" : "#080707"
         }}
         transition={{ duration: 0.3 }}
       >

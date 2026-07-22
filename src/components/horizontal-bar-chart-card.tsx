@@ -37,8 +37,8 @@ export function HorizontalBarChartCard() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <h2 className="text-[#1d3a2f] mb-1">Product Revenue</h2>
-        <p className="text-[#7a9a8d] text-sm font-semibold">Top performing products</p>
+        <h2 className="text-[#080707] mb-1 font-bold">Product Revenue</h2>
+        <p className="text-[#514F4D] text-sm font-semibold">Top performing products</p>
       </motion.div>
 
       <div className="h-[400px] p-4 rounded-2xl glass-neo-inset">
@@ -48,8 +48,8 @@ export function HorizontalBarChartCard() {
             const v = MAX_V * t;
             return (
               <g key={`g${t}`}>
-                <line x1={x} y1={PT} x2={x} y2={PT + CH} stroke="#bdc9c4" strokeWidth={0.5} opacity={0.5} />
-                <text x={x} y={H - 4} textAnchor="middle" fontSize={8} fill="#7a9a8d">
+                <line x1={x} y1={PT} x2={x} y2={PT + CH} stroke="#DDDBDA" strokeWidth={0.5} opacity={0.6} />
+                <text x={x} y={H - 4} textAnchor="middle" fontSize={8} fill="#514F4D">
                   {v === 0 ? "0" : `${(v / 1000).toFixed(0)}k`}
                 </text>
               </g>
@@ -62,11 +62,11 @@ export function HorizontalBarChartCard() {
             const midY = y + BAR_H / 2;
             return (
               <g key={`b${i}`} onMouseEnter={() => setHi(i)} onMouseLeave={() => setHi(null)} style={{ cursor: "pointer" }}>
-                <text x={PL - 6} y={midY + 4} textAnchor="end" fontSize={9} fill={active ? "#1d3a2f" : "#7a9a8d"}>
+                <text x={PL - 6} y={midY + 4} textAnchor="end" fontSize={9} fill={active ? "#0176D3" : "#514F4D"}>
                   {d.category.split(" ")[1]}
                 </text>
-                <rect x={PL} y={y} width={CW} height={BAR_H} rx={4} fill="#bdc9c4" opacity={0.15} />
-                <rect x={PL} y={y} width={w} height={BAR_H} rx={4} fill={COLORS[i]} opacity={active ? 1 : 0.82} />
+                <rect x={PL} y={y} width={CW} height={BAR_H} rx={4} fill="#DDDBDA" opacity={0.3} />
+                <rect x={PL} y={y} width={w} height={BAR_H} rx={4} fill={COLORS[i]} opacity={active ? 1 : 0.85} />
                 {active && (
                   <text x={PL + w + 5} y={midY + 4} fontSize={9} fill={COLORS[i]} fontWeight={600}>
                     {d.value.toLocaleString()}
@@ -89,8 +89,8 @@ export function HorizontalBarChartCard() {
             whileHover={{ scale: 1.1 }}
           >
             <div className="w-3 h-3 rounded-full mx-auto mb-2" style={{ backgroundColor: COLORS[index] }} />
-            <p className="text-[#7a9a8d] text-xs mb-1">{item.category.split(" ")[1]}</p>
-            <p className={`text-xs font-semibold ${item.growth > 0 ? "text-[#009970]" : "text-[#ef4444]"}`}>
+            <p className="text-[#514F4D] text-xs mb-1">{item.category.split(" ")[1]}</p>
+            <p className={`text-xs font-semibold ${item.growth > 0 ? "text-[#2E844A]" : "text-[#BA0517]"}`}>
               {item.growth > 0 ? "+" : ""}{item.growth}%
             </p>
           </motion.div>
